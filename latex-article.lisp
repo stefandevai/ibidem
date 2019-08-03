@@ -75,7 +75,7 @@
 
 (defun create-latex-paragraph (paragraph)
   (str:concat
-    paragraph
+    (create-latex-italics (create-latex-bold paragraph))
     "~%~%"))
 
 (defun create-latex-section (section)
@@ -89,6 +89,12 @@
     "\\noindent{\\textbf{\\uppercase{"
     (str:trim (str:substring 1 nil heading))
     "}}}~%~%"))
+
+(defun create-latex-bold (text)
+  (ppcre:regex-replace-all "\\*\\*([^\\*]\\S(.*?\\S)?)\\*\\*" text "\\textbf{\\1}"))
+
+(defun create-latex-italics (text)
+  (ppcre:regex-replace-all "\\*([^\\*]\\S(.*?\\S)?)\\*" text "\\textit{\\1}"))
 
 (defun write-to-file (str file-path)
   "Receives a string and a filepath and writes the string to the file"

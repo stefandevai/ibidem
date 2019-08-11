@@ -12,6 +12,9 @@
 ;; Article's main instance
 (defparameter *article* (make-instance 'article))
 
+;; =============================================================================
+;; MARKDOWN FUNCTIONS
+;; =============================================================================
 (defun parse-header (header-str)
   "Parse content within markdown's header"
   (setf (author     *article*) (parse-header-param "author" header-str))
@@ -47,6 +50,36 @@
          (header-end   (search "---" md-str :start2 header-start)))
     (parse-header (str:substring header-start header-end md-str))
     (parse-body   (str:substring (+ header-end 4) nil md-str))))
+
+;; =============================================================================
+;; LATEX FUNCTIONS
+;; =============================================================================
+(defvar linebreak "\\linebreak~%"
+  "Default linebreak sintax in Latex")
+
+(defmacro surround-string (str1 str2 &body body)
+  "Surround strings from `body' with `str1' and `str2'."
+  `(str:concat ,str1 ,@body ,str2))
+
+(defmacro latex-element (element-string newline &body body)
+  "Facilitate the creation of a Latex element string."
+  `(surround-string (str:concat "\\" ,element-string "{")
+       (if ,newline "}~%" "}")
+                    ,@body))
+
+(defmacro bold (&body body)
+  "Surround strings with `\textbf{}' directive in Latex."
+  `(latex-element "textbf" nil ,@body))
+
+(defmacro emph (&body body)
+  "Emphasizes strings with `\emph{}' directive in Latex."
+  `(latex-element "emph" nil ,@body))
+
+(defmacro begin-end (arg &body body)
+  "Surround strings with `\begin{ arg }' and `\end{ arg }'."
+  `(surround-string (latex-element "begin" t ,arg)
+                    ,@body
+                    (latex-element "end" t ,arg)))
 
 (defun create-latex-article ()
   "Creates a Latex string from *article* instance"
@@ -96,9 +129,16 @@
 (defun create-latex-emphasis (text)
   (ppcre:regex-replace-all "\\*([^\\*]\\S(.*?\\S)?)\\*" text "\\emph{\\1}"))
 
+;; =============================================================================
+;; MAIN
+;; =============================================================================
 (defun write-to-file (str file-path)
   "Receives a string and a filepath and writes the string to the file"
-  (with-open-file (out file-path :direction :output :if-exists :supersede :external-format :utf-8)
+  (with-open-file (out
+                   file-path
+                   :direction :output
+                   :if-exists :supersede
+                   :external-format :utf-8)
     (format out str)))
 
 (defun create (input-path output-path)

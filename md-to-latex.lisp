@@ -2,18 +2,8 @@
 
 (in-package #:md-to-latex)
 
-;; Holds article's parsed content
-(defclass article ()
-  ((author    :initform nil :accessor author)
-   (location  :initform nil :accessor location)
-   (date      :initform nil :accessor date)
-   (body      :initform nil :accessor body)))
-
-;; Article's main instance
-(defparameter *article* (make-instance 'article))
-
 ;; =============================================================================
-;; MARKDOWN FUNCTIONS
+;; MARKDOWN
 ;; =============================================================================
 (defun parse-header (header-str)
   "Parse content within markdown's header"
@@ -52,9 +42,9 @@
     (parse-body   (str:substring (+ header-end 4) nil md-str))))
 
 ;; =============================================================================
-;; LATEX FUNCTIONS
+;; LATEX
 ;; =============================================================================
-(defvar linebreak "\\linebreak~%"
+(defvar *linebreak* "\\linebreak~%"
   "Default linebreak sintax in Latex")
 
 (defmacro surround-string (str1 str2 &body body)
@@ -75,28 +65,51 @@
   "Emphasizes strings with `\emph{}' directive in Latex."
   `(latex-element "emph" nil ,@body))
 
+(defmacro noindent (&body body)
+  "Surround strings with `\noindent{}' directive in Latex."
+  `(latex-element "noindent" nil ,@body))
+
+(defmacro uppercase (&body body)
+  "Surround strings with `\uppercase{}' directive in Latex."
+  `(latex-element "uppercase" nil ,@body))
+
+(defmacro section (&body body)
+  "Surround strings with `\section{}' directive in Latex."
+  `(latex-element "section*" t ,@body))
+
 (defmacro begin-end (arg &body body)
   "Surround strings with `\begin{ arg }' and `\end{ arg }'."
   `(surround-string (latex-element "begin" t ,arg)
-                    ,@body
-                    (latex-element "end" t ,arg)))
+       (latex-element "end" t ,arg)
+       ,@body))
+
+;; =============================================================================
+;; MAIN
+;; =============================================================================
+;; Holds article's parsed content
+(defclass article ()
+  ((author    :initform nil :accessor author)
+   (location  :initform nil :accessor location)
+   (date      :initform nil :accessor date)
+   (body      :initform nil :accessor body)))
+
+;; Article's main instance
+(defparameter *article* (make-instance 'article))
 
 (defun create-latex-article ()
   "Creates a Latex string from *article* instance"
   (let ((begin-str    "\\documentclass[12pt]{article}~%\\usepackage{crimson}~%\\usepackage[T1]{fontenc}~%\\usepackage[french]{babel}~%\\usepackage{geometry}~%\\geometry{a4paper, margin=1in}~%~%\\renewcommand{\\tiny}{\\normalsize}~%\\renewcommand{\\footnotesize}{\\normalsize}~%\\renewcommand{\\small}{\\normalsize}~%\\renewcommand{\\large}{\\normalsize}~%\\renewcommand{\\Large}{\\normalsize}~%\\renewcommand{\\LARGE}{\\normalsize}~%\\renewcommand{\\huge}{\\normalsize}~%\\renewcommand{\\Huge}{\\normalsize}~%~%\\begin{document}~%~%")
         (end-str      "\\end{document}~%"))
-    (str:concat begin-str (str:concat (create-latex-header) (create-latex-body)) end-str)))
+    (str:concat begin-str (str:concat (make-latex-header) (create-latex-body)) end-str)))
 
-(defun create-latex-header ()
-  (str:concat
-    "\\begin{flushright}~%"
-    (if (author *article*)     (create-latex-header-item (author *article*)))
-    (if (location *article*)   (create-latex-header-item (location *article*)))
-    (if (date *article*)       (create-latex-header-item (date *article*)))
-    "\\end{flushright}~%~%"))
+(defun make-latex-header ()
+  (begin-end "flushright"
+    (if (author *article*) (make-latex-header-item (author *article*)))
+    (if (location *article*) (make-latex-header-item (location *article*)))
+    (if (date *article*) (make-latex-header-item (date *article*)))))
 
-(defun create-latex-header-item (item)
-  (str:concat "  \\textbf{" item "}~%  \\linebreak~%"))
+(defun make-latex-header-item (item)
+  (str:concat (bold item) "~%"  *linebreak*))
 
 (defun create-latex-body ()
   (reduce #'str:concat (mapcar 'create-latex-body-line (body *article*))))
@@ -106,22 +119,17 @@
                                 (:section   (create-latex-section (getf line :content)))
                                 (:heading   (create-latex-heading (getf line :content)))))
 
-(defun create-latex-paragraph (paragraph)
+(defun create-latex-paragraph (string)
   (str:concat
-    (create-latex-emphasis (create-latex-bold paragraph))
+    (create-latex-emphasis (create-latex-bold string))
     "~%~%"))
 
-(defun create-latex-section (section)
-  (str:concat
-    "\\section*{"
-    (str:trim (str:substring 2 nil section))
-    "}~%"))
+(defun create-latex-section (string)
+  (section (str:trim (str:substring 2 nil string))))
 
-(defun create-latex-heading (heading)
-  (str:concat
-    "\\noindent{\\textbf{\\uppercase{"
-    (str:trim (str:substring 1 nil heading))
-    "}}}~%~%"))
+(defun create-latex-heading (string)
+  (str:concat (noindent (bold (uppercase (str:trim (str:substring 1 nil string)))))
+              "~%~%"))
 
 (defun create-latex-bold (text)
   (ppcre:regex-replace-all "\\*\\*([^\\*]\\S(.*?\\S)?)\\*\\*" text "\\textbf{\\1}"))
@@ -129,9 +137,6 @@
 (defun create-latex-emphasis (text)
   (ppcre:regex-replace-all "\\*([^\\*]\\S(.*?\\S)?)\\*" text "\\emph{\\1}"))
 
-;; =============================================================================
-;; MAIN
-;; =============================================================================
 (defun write-to-file (str file-path)
   "Receives a string and a filepath and writes the string to the file"
   (with-open-file (out

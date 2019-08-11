@@ -1,5 +1,6 @@
 ;;;; package.lisp
 
-(defpackage #:latex-article
+(defpackage #:md-to-latex
   (:use #:cl)
-  (:export #:create))
+  (:export #:create
+           #:main))

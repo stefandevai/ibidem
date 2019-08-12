@@ -1,11 +1,13 @@
 ;;;; md-to-latex.asd
 
 (asdf:defsystem #:md-to-latex
-  :description "Describe md-to-latex here"
-  :author "Your Name <your.name@example.com>"
-  :license  "Specify license here"
-  :version "0.0.1"
+  :description "Convert a markdown file to a latex file."
+  :author "Stefan Devai <stedevai@gmail.com>"
+  :license  "MIT"
+  :version "0.0.2"
   :serial t
   :depends-on (#:str #:cl-ppcre #:unix-opts)
   :components ((:file "package")
-               (:file "md-to-latex")))
+               (:file "src/latex")
+               (:file "src/markdown")
+               (:file "src/md-to-latex")))

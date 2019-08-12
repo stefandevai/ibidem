@@ -10,4 +10,4 @@
   :components ((:file "package")
                (:file "src/latex")
                (:file "src/markdown")
-               (:file "src/md-to-latex")))
+               (:file "src/main")))

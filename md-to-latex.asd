@@ -10,6 +10,6 @@
   :components ((:file "package")
                (:file "src/definitions")
                (:file "src/latex")
-               (:file "src/markdown")
-               (:file "src/bibliography")
+               (:file "src/parse-markdown")
+               (:file "src/write-latex")
                (:file "src/main")))

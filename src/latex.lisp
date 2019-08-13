@@ -30,7 +30,7 @@
   `(latex-element "emph" nil ,@body))
 
 (defmacro url (&body body)
-  "Emphasizes strings with `\emph{}' directive in Latex."
+  "Emphasizes strings with `\url{}' directive in Latex."
   `(latex-element "url" nil ,@body))
 
 (defmacro noindent (&body body)

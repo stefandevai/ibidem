@@ -10,8 +10,8 @@
         (end-str "\\end{document}~%"))
     (str:concat begin-str
                 (str:concat (make-latex-header object)
-                            (make-latex-body object))
-;                            (make-latex-bibliography object))
+                            (make-latex-body object)
+                            (make-latex-bibliography object))
                 end-str)))
 
 (defun make-latex-header (object)
@@ -48,8 +48,54 @@
 (defun make-latex-emphasis (text)
   (ppcre:regex-replace-all "\\*([^\\*]\\S(.*?\\S)?)\\*" text (emph "\\1")))
 
+(defmacro build-citation (source)
+  (let ((style-params (getf +citation-format+
+                            +citation-style+)))
+    `(let ((params (getf ,style-params (read-from-string (str:concat ":"
+                                                                     (slot-value ,source
+                                                                     'ctype))))))
+       (reduce #'str:concat
+               (loop :for param :in params
+                  :collect (cond ((listp param)
+                                  (str:concat (eval (list (car param)
+                                                          (slot-value ,source
+                                                                      (cadr param))))
+                                              (reduce #'str:concat (cddr param))))
+                                 (t (str:concat (slot-value ,source param) ". "))))))))
+
+(defun author-surname-initials (string)
+  (let ((names (str:split #\Space string)))
+    (str:concat (car (reverse names))
+                ", "
+                (reduce #'str:concat
+                        (mapcar (lambda (name) (str:concat (str:s-first name) ". "))
+                                (reverse (cdr (reverse names))))))))
+
+(defun get-citation-source (citation-id sources)
+  (find-if (lambda (x) (string= citation-id (id x))) sources))
+
+(defun make-citation (string sources)
+  (let ((citation-data (str:split ":" string)))
+    (str:concat
+     (build-citation
+      (get-citation-source (car citation-data) sources)))))
+
+(defun make-latex-bibliography-item (citation-string index object)
+    (str:concat "["
+                (write-to-string index)
+                "] "
+                (make-citation citation-string (bibliography object))
+                "~%~%"))
+
 (defun make-latex-bibliography (object)
-  (print object))
+  (str:concat (section "Bibliography")
+              (reduce #'str:concat
+                      (let ((citations (citations object)))
+                        (loop :for citation :in citations
+                           :for index :from 1 :to (length citations)
+                           :collect (make-latex-bibliography-item citation
+                                                                  index
+                                                                  object))))))
 
 (defun write-to-file (str file-path)
   "Receives a string and a filepath and writes the string to the file"

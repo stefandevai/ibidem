@@ -8,11 +8,11 @@ location: "Sorbonne Université"
 
 ## Intro
 
-Lorem ipsum dolor ["jacoby", 336] sit amet, *consectetur* adipiscing elit, sed do eiusmod ***tempor incididunt*** ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui **officia deserunt** mollit anim id est laborum.
+Lorem ipsum dolor c[jacoby:336] sit amet, *consectetur* adipiscing elit, sed do eiusmod ***tempor incididunt*** ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui **officia deserunt** mollit anim id est laborum.
 
 ## Section
 
-Lorem ipsum dolor sit amet, consectetur ["jacoby", 445] adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Lorem ipsum dolor sit amet, consectetur c[kraizer:445-532] adipiscing elit c[kraizer:13,14], sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 "Jacoby, W. G. (1994). Public attitudes toward government spending. American Journal of Political Science, 38(2), 336-361."
 "Jacoby, W. G., & Laitin, D. D. (1994). Public attitudes toward government spending. American Journal of Political Science, 38(2), 336-361."

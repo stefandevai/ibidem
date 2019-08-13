@@ -4,33 +4,6 @@
 
 (in-package #:md-to-latex)
 
-(defclass markdown-object ()
-  ((author :initform nil
-           :accessor author
-           :documentation "Markdown contents' author specified in the header.")
-
-   (location :initform nil
-             :accessor location
-             :documentation "Markdown contents' location specified in the header.")
-
-   (date :initform nil
-         :accessor date
-         :documentation "Markdown contents' date specified in the header.")
-
-   (body :initform nil
-         :accessor body
-         :documentation "Markdown contents between header and bibliography of EOF.")
-
-   (citations :initform nil
-              :accessor citations
-              :documentation "Hold citations found in text.")
-
-   (bibliography :initform nil
-                 :accessor bibliography
-                 :documentation "Keep all citation source objects."))
-
-  (:documentation "Hold information about a markdown file structure."))
-
 (defun string-between (delimiter-1 delimiter-2 string &key (start 0))
   "Return the substring between `delimiter-1' and `delimiter-2' in `string'.
   If delimiter-2 is nil, return the string from delimiter-1 until the end-of-file."
@@ -76,7 +49,8 @@
   ;; otherwise it's the string after the header until the end-of-file.
   (let* ((has-bibliography? (string-between "~--" "~--" string))
          (body-string (if has-bibliography?
-                          (string-between "---" "~--" string :start 3)
+                          (parse-citations (string-between "---" "~--" string :start 3)
+                                           object)
                           (string-between "---" nil string :start 3))))
     (setf (body object)
           (remove nil

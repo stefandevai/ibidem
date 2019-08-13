@@ -8,6 +8,7 @@
   :serial t
   :depends-on (#:str #:cl-ppcre #:unix-opts)
   :components ((:file "package")
+               (:file "src/definitions")
                (:file "src/latex")
                (:file "src/markdown")
                (:file "src/bibliography")

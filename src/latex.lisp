@@ -14,7 +14,7 @@
 (defmacro latex-element (element-string newline &body body)
   "Facilitate the creation of a Latex element string."
   `(surround-string (str:concat "\\" ,element-string "{")
-       (if ,newline "}~%" "}")
+                    (if ,newline "}~%" "}")
                     ,@body))
 
 (defmacro bold (&body body)
@@ -40,5 +40,5 @@
 (defmacro begin-end (arg &body body)
   "Surround strings with `\begin{ arg }' and `\end{ arg }'."
   `(surround-string (latex-element "begin" t ,arg)
-       (latex-element "end" t ,arg)
-       ,@body))
+                    (latex-element "end" t ,arg)
+                    ,@body))

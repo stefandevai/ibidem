@@ -10,4 +10,5 @@
   :components ((:file "package")
                (:file "src/latex")
                (:file "src/markdown")
+               (:file "src/bibliography")
                (:file "src/main")))

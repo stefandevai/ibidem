@@ -11,13 +11,14 @@
     (str:concat begin-str
                 (str:concat (make-latex-header object)
                             (make-latex-body object))
+;                            (make-latex-bibliography object))
                 end-str)))
 
 (defun make-latex-header (object)
   (begin-end "flushright"
-    (if (author object) (make-latex-header-item (author object)))
-    (if (location object) (make-latex-header-item (location object)))
-    (if (date object) (make-latex-header-item (date object)))))
+             (if (author object) (make-latex-header-item (author object)))
+             (if (location object) (make-latex-header-item (location object)))
+             (if (date object) (make-latex-header-item (date object)))))
 
 (defun make-latex-header-item (item)
   (str:concat (bold item) "~%"  *linebreak*))
@@ -27,8 +28,8 @@
 
 (defun make-latex-body-line (line)
   (ecase (getf line :line-type) (:paragraph (make-latex-paragraph (getf line :content)))
-                                (:section (make-latex-section (getf line :content)))
-                                (:heading (make-latex-heading (getf line :content)))))
+         (:section (make-latex-section (getf line :content)))
+         (:heading (make-latex-heading (getf line :content)))))
 
 (defun make-latex-paragraph (string)
   (str:concat (make-latex-emphasis (make-latex-bold string))
@@ -46,6 +47,9 @@
 
 (defun make-latex-emphasis (text)
   (ppcre:regex-replace-all "\\*([^\\*]\\S(.*?\\S)?)\\*" text (emph "\\1")))
+
+(defun make-latex-bibliography (object)
+  (print object))
 
 (defun write-to-file (str file-path)
   "Receives a string and a filepath and writes the string to the file"
@@ -72,16 +76,16 @@
 
 (defun main ()
   (opts:define-opts
-    (:name :help
-           :description "show this help text"
-           :short #\h
-           :long "help")
-    (:name :out
-           :description "the output latex file name"
-           :short #\o
-           :long "output"
-           :arg-parser #'identity
-           :meta-var "FILE"))
+      (:name :help
+             :description "show this help text"
+             :short #\h
+             :long "help")
+      (:name :out
+             :description "the output latex file name"
+             :short #\o
+             :long "output"
+             :arg-parser #'identity
+             :meta-var "FILE"))
 
   (multiple-value-bind (options free-args)
       (handler-case
@@ -99,14 +103,14 @@
           (opts:exit 1)))
 
     (when-option (options :help)
-      (opts:describe
-       :prefix "example of how it works"
-       :suffix "so thats it"
-       :usage-of "usage.sh"
-       :args "[FREE-ARGS]"))
+                 (opts:describe
+                  :prefix "example of how it works"
+                  :suffix "so thats it"
+                  :usage-of "usage.sh"
+                  :args "[FREE-ARGS]"))
 
     (if (first free-args)
-	(and (let ((output-file nil))
-       (when-option (options :out) (setf output-file (getf options :out)))
-       (if (not output-file) (setf output-file "./article.tex"))
-       (create (first free-args) output-file))))))
+        (and (let ((output-file nil))
+             (when-option (options :out) (setf output-file (getf options :out)))
+             (if (not output-file) (setf output-file "./article.tex"))
+             (create (first free-args) output-file))))))

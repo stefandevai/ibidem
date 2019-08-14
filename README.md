@@ -1,7 +1,8 @@
-# latex-builder
+# LATEX-BUILDER
 
 Focus on research and automate latex formatting.
-The application is in it's early development stage.
+
+The application is in its early development stage.
 
 ## What is it about?
 
@@ -23,7 +24,7 @@ The purpose of this utility is to automate the formatting of academic articles o
 - [ ] Parse custom markdown syntax
   - [x] Parse header
   - [x] Parse bibliography
-  - [~] Parse citations in text
+  - [ ] Parse citations in text
   - [ ] Math functions
 
 - [ ] Write full LaTeX syntax
@@ -63,6 +64,7 @@ We use a superset of Markdown's syntax in order to allow meta information about 
 ### Header block
 
 If we want to have a latex header, we write a header at the beginning of the markdown file containing the following format and parameters:
+
 ~~~markdown
 ---
 author: "Your Name"
@@ -84,7 +86,7 @@ author: "Author's Full Name"
 title: "Source's Title"
 journal: "Source's Journal"
 year: "Publication year"
-volume-issue: "[valume]([issue])"
+volume-issue: "[volume]([issue])"
 --
 
 --
@@ -100,6 +102,7 @@ volume-issue: "38(2)"
 ~~~
 
 Each block piece is described in isolation here:
+
 ~~~markdown
 ~--
 [This is a bibliography block. It expects citation source blocks.]

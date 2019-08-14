@@ -2,7 +2,7 @@
 
 Focus on research and automate latex formatting.
 
-The application is in its early development stage.
+**NOTE: the application is in its early development stage.**
 
 ## What is it about?
 

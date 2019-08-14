@@ -8,7 +8,7 @@ The application is in its early development stage.
 
 The purpose of this utility is to automate the formatting of academic articles or essays:
 
-- We write a file on a [superset of markdown's syntax](#custom-markdown).
+- We write a file on a [superset of markdown's syntax](#superset-of-markdowns-syntax).
 - *latex-builder* converts it to a basic *LaTeX* file.
 
 ## Progress

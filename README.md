@@ -36,7 +36,7 @@ The purpose of this utility is to automate the formatting of academic articles o
 
 Currently it has only been tested in Linux and OS X using SBCL.
 
-### First option: build an executable
+### First option: *build an executable*
 
 1. Make sure that you have [SBCL](http://www.sbcl.org/), [quicklisp](https://www.quicklisp.org/beta/) and [asdf](https://common-lisp.net/project/asdf/) installed.
 
@@ -46,7 +46,7 @@ Currently it has only been tested in Linux and OS X using SBCL.
 
 4. Run `./latex-builder input-path -o output-path`, where `input-path` is the markdown file and `output-path` is the path and name of the output `.tex` file.
 
-### Second option: run from the REPL
+### Second option: *run from the REPL*
 
 1. Make sure that you have [SBCL](http://www.sbcl.org/), [quicklisp](https://www.quicklisp.org/beta/) and [asdf](https://common-lisp.net/project/asdf/) installed.
 

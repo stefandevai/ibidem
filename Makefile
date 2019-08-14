@@ -3,15 +3,15 @@ ifeq ($(PREFIX),)
 endif
 
 BIN_PATH = ./bin
-EXECUTABLE_NAME = markdown-latex
+EXECUTABLE_NAME = latex-builder
 
 all: build
 
 .PHONY: build
 build:
-	sbcl --load markdown-latex.asd \
-	     --eval '(ql:quickload :markdown-latex)' \
-	     --eval "(sb-ext:save-lisp-and-die \"$(BIN_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'ml:main :purify t :compression t)" \
+	sbcl --load latex-builder.asd \
+	     --eval '(ql:quickload :latex-builder)' \
+	     --eval "(sb-ext:save-lisp-and-die \"$(BIN_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main :purify t :compression t)" \
 	     --end-toplevel-options "$@"
 
 .PHONY: install

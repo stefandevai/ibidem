@@ -3,7 +3,7 @@
 ;;;; main.lisp                                                                                  ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:ml)
+(in-package #:latex-builder)
 
 (defun write-to-file (str file-path)
   "Receive a string and a filepath and writes the string to the file"

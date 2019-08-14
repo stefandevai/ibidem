@@ -1,9 +1,5 @@
 # latex-article
-### _Your Name <your.name@example.com>_
 
-This is a project to do ... something.
+Converts a custom markdown syntax file to latex.
 
-## License
-
-Specify license here
 

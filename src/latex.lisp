@@ -2,7 +2,7 @@
 ;;;; latex.lisp                                                                                 ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:md-to-latex)
+(in-package #:ml)
 
 (defvar *linebreak* "\\linebreak~%"
   "Default linebreak sintax in Latex")

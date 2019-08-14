@@ -2,7 +2,7 @@
 ;;;; definitions.lisp                                                                           ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:md-to-latex)
+(in-package #:ml)
 
 (defconstant +d-bibliography+ "~--"
   "Custom markdown delimiter for the bibliography section.")

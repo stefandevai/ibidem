@@ -2,7 +2,7 @@
 ;;;; write-latex.lisp                                                                           ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:md-to-latex)
+(in-package #:ml)
 
 (defun make-latex-article (object)
   "Creates a Latex string from a `markdown-object' instance."

@@ -8,7 +8,7 @@ Focus on research and automate latex formatting.
 
 The purpose of this utility is to automate the formatting of academic articles or essays:
 
-- We write a file on a [superset of markdown's syntax](#superset-of-markdowns-syntax).
+- We write a file on a [superset](#superset-of-markdowns-syntax) of [markdown's syntax](https://daringfireball.net/projects/markdown/).
 - *latex-builder* converts it to a basic *LaTeX* file.
 
 ## Progress

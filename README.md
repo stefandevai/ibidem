@@ -1,6 +1,6 @@
 # latex-builder
 
-Focus on research and automate latex formatting.
+Latex formatting automation.
 The application is in it's early development stage.
 
 ## What is it about?

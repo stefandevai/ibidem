@@ -4,16 +4,16 @@
 
 (in-package #:latex-builder)
 
-(defconstant +d-bibliography+ "~--"
+(defvar +d-bibliography+ "~--"
   "Custom markdown delimiter for the bibliography section.")
 
-(defconstant +d-citation-source+ "--"
+(defvar +d-citation-source+ "--"
   "Custom markdown delimiter for a single citation source.")
 
-(defconstant +citation-style+ :apa
+(defvar +citation-style+ :apa
   "Global style for citations in biliography.")
 
-(defconstant +citation-format+
+(defvar +citation-format+
   '(:apa (list :article '((author-surname-initials author)
                           (parenthesis year ". ")
                           title

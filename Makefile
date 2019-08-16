@@ -10,9 +10,17 @@ all: build
 .PHONY: build
 build:
 	sbcl --load latex-builder.asd \
-	     --eval '(ql:quickload :latex-builder)' \
+	     --eval "(ql:quickload :latex-builder)" \
 	     --eval "(sb-ext:save-lisp-and-die \"$(BIN_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main :purify t :compression t)" \
 	     --end-toplevel-options "$@"
+
+.PHONY: test
+test:
+	sbcl --noinform \
+		   --disable-debugger \
+	     --load latex-builder-test.asd \
+		   --eval "(ql:quickload :latex-builder-test)" \
+			 --eval "(progn (rove:run :latex-builder-test) (sb-ext:quit))" \
 
 .PHONY: install
 install: 

@@ -1,5 +1,5 @@
 ;;;; ========================================================================================== ;;;;
-;;;; markdown-latex.asd                                                                            ;;;;
+;;;; latex-builder.asd                                                                          ;;;;
 ;;;; ========================================================================================== ;;;;
 
 (asdf:defsystem #:latex-builder
@@ -9,9 +9,11 @@
   :version "0.0.3"
   :serial t
   :depends-on (#:str #:cl-ppcre #:unix-opts)
-  :components ((:file "src/package")
-               (:file "src/definitions")
-               (:file "src/latex")
-               (:file "src/parse-markdown")
-               (:file "src/write-latex")
-               (:file "src/main")))
+  :components ((:module "src"
+                :components
+                ((:file "package")
+                 (:file "definitions")
+                 (:file "latex")
+                 (:file "parse-markdown")
+                 (:file "write-latex")
+                 (:file "main")))))

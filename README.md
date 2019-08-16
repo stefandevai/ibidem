@@ -1,13 +1,14 @@
-# latex-builder
+# LATEX-BUILDER
 
 Latex formatting automation.
-The application is in it's early development stage.
+
+**NOTE: the application is in its early development stage.**
 
 ## What is it about?
 
 The purpose of this utility is to automate the formatting of academic articles or essays:
 
-- We write a file on a [superset of markdown's syntax](#custom-markdown).
+- We write a file on a [superset](#superset-of-markdowns-syntax) of [markdown's syntax](https://daringfireball.net/projects/markdown/).
 - *latex-builder* converts it to a basic *LaTeX* file.
 
 ## Progress
@@ -23,7 +24,7 @@ The purpose of this utility is to automate the formatting of academic articles o
 - [ ] Parse custom markdown syntax
   - [x] Parse header
   - [x] Parse bibliography
-  - [~] Parse citations in text
+  - [ ] Parse citations in text
   - [ ] Math functions
 
 - [ ] Write full LaTeX syntax
@@ -35,7 +36,7 @@ The purpose of this utility is to automate the formatting of academic articles o
 
 Currently it has only been tested in Linux and OS X using SBCL.
 
-### First option: build an executable
+### First option: *build an executable*
 
 1. Make sure that you have [SBCL](http://www.sbcl.org/), [quicklisp](https://www.quicklisp.org/beta/) and [asdf](https://common-lisp.net/project/asdf/) installed.
 
@@ -45,7 +46,7 @@ Currently it has only been tested in Linux and OS X using SBCL.
 
 4. Run `./latex-builder input-path -o output-path`, where `input-path` is the markdown file and `output-path` is the path and name of the output `.tex` file.
 
-### Second option: run from the REPL
+### Second option: *run from the REPL*
 
 1. Make sure that you have [SBCL](http://www.sbcl.org/), [quicklisp](https://www.quicklisp.org/beta/) and [asdf](https://common-lisp.net/project/asdf/) installed.
 
@@ -63,6 +64,7 @@ We use a superset of Markdown's syntax in order to allow meta information about 
 ### Header block
 
 If we want to have a latex header, we write a header at the beginning of the markdown file containing the following format and parameters:
+
 ~~~markdown
 ---
 author: "Your Name"
@@ -84,7 +86,7 @@ author: "Author's Full Name"
 title: "Source's Title"
 journal: "Source's Journal"
 year: "Publication year"
-volume-issue: "[valume]([issue])"
+volume-issue: "[volume]([issue])"
 --
 
 --
@@ -100,6 +102,7 @@ volume-issue: "38(2)"
 ~~~
 
 Each block piece is described in isolation here:
+
 ~~~markdown
 ~--
 [This is a bibliography block. It expects citation source blocks.]

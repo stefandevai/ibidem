@@ -19,15 +19,16 @@
   "Basic default layout in case the user hasn't provided one.")
 
 (defvar +citation-format+
-  '(:apa (list :article '((author-surname-initials author)
-                          (parenthesis year ". ")
-                          title
-                          (emph journal ", ")
-                          volume-issue)
-               :web '((author-surname-initials author)
-                      (parenthesis year ". ")
-                      (emph title ". ")
-                      (url web-link)))
+  '(:apa (list
+          :article '((author-surname-initials author)
+                     (parenthesis year ". ")
+                     title
+                     (emph journal ", ")
+                     volume-issue)
+          :web '((author-surname-initials author)
+                 (parenthesis year ". ")
+                 (emph title ". ")
+                 (url web-link)))
 
     :other '(:article '(author)
              :web '(author)))

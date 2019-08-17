@@ -35,7 +35,7 @@
     (if (and start-index end-index)
         (list (str:substring 0 start-index layout-string)
               (str:substring end-index nil layout-string))
-        (error "FATAL: Layout file not found.~%"))))
+        (error "FATAL: Layout file is badly formatted.~%"))))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Header writing                                                                               ;;;
@@ -110,17 +110,18 @@
         (params (gensym)))
     `(let ((,params (getf ,style-params
                           (read-from-string
-                          (str:concat ":"
-                                      (slot-value ,source
-                                      'ctype))))))
+                           (str:concat ":"
+                                       (slot-value ,source
+                                                   'ctype))))))
        (reduce #'str:concat
                (loop :for param :in ,params
                   :collect (cond ((listp param)
-                                  (str:concat (eval (list (car param)
-                                                          (slot-value ,source
-                                                                      (cadr param))))
-                                              (reduce #'str:concat (cddr param))))
-                                 (t (str:concat (slot-value ,source param) ". "))))))))
+                                  (let ((param-value (slot-value ,source (cadr param))))
+                                    (when param-value
+                                      (str:concat (eval (list (car param) param-value))
+                                                  (reduce #'str:concat (cddr param))))))
+                                 (t (when (slot-value ,source param)
+                                      (str:concat (slot-value ,source param) ". ")))))))))
 
 (defun author-surname-initials (string)
   "Return author' surname followed by the initials of the other names.

@@ -18,18 +18,10 @@
   "Receive a Markdown (.md) file as input and outputs a Latex (.tex) to a file."
   (let ((object (parse-markdown (uiop:read-file-string input-path))))
     (write-to-file (make-latex-article object layout) output-path))
-  (format t "> SUCCESS: Created ~A~%" output-path))
-
-(defun unknown-option (condition)
-  (format t "> WARNING: ~s option is unknown!~%" (opts:option condition))
-  (invoke-restart 'opts:skip-option))
-
-(defmacro when-option ((options opt) &body body)
-  `(let ((it (getf ,options ,opt)))
-     (when it
-       ,@body)))
+  (format t "> SUCCESS: Created \"~A\"~%" output-path))
 
 (defun print-intro ()
+  "Print intro for cli tool."
   (format t "
 
 \`7XXF\'            XXP\"\"XX\"\"YXX    \`YXX\'   \`XP\'
@@ -56,19 +48,11 @@
   ================================================================
   AUTHOR: Stefan Devai
   WEBSITE: https://stefandevai.me/
-  SOURCE CODE: https://github.com/stefandevai/latex-builder
+  SOURCE: https://github.com/stefandevai/latex-builder
   ================================================================~%~%~%~%"))
 
-(defun main ()
-  (setf *debugger-hook*
-        (lambda (condition old-hook)
-          (declare (ignore old-hook))
-          (format *error-output*
-                  "Caught error: ~a~%"
-                  condition)
-          (finish-output *error-output*)
-          (sb-ext:quit)))
-
+(defun define-options ()
+  "Define cli options."
   (opts:define-opts
     (:name :help
            :description "show this help text."
@@ -85,7 +69,24 @@
            :short #\o
            :long "output"
            :arg-parser #'identity
-           :meta-var "FILE"))
+           :meta-var "FILE")))
+
+(defun unknown-option (condition)
+  "Inform unknown cli option."
+  (format t "> WARNING: ~s option is unknown!~%" (opts:option condition))
+  (invoke-restart 'opts:skip-option))
+
+(defun main ()
+  (setf *debugger-hook*
+        (lambda (condition old-hook)
+          (declare (ignore old-hook))
+          (format *error-output*
+                  "> CAUGHT ERROR: ~a~%"
+                  condition)
+          (finish-output *error-output*)
+          (sb-ext:quit)))
+
+  (define-options)
 
   (let ((output-path "./article.tex")
         (layout-path nil))
@@ -94,14 +95,14 @@
             (handler-bind ((opts:unknown-option #'unknown-option))
               (opts:get-opts))
           (opts:missing-arg (condition)
-            (format t "FATAL: option ~s needs an argument.~%"
+            (format t "> FATAL: option ~s needs an argument.~%"
                     (opts:option condition)))
           (opts:arg-parser-failed (condition)
-            (format t "FATAL: cannot parse ~s as argument of ~s.~%"
+            (format t "> FATAL: cannot parse ~s as argument of ~s.~%"
                     (opts:raw-arg condition)
                     (opts:option condition)))
           (opts:missing-required-option (con)
-            (format t "FATAL: ~a is required.~%" con)
+            (format t "> FATAL: ~a is required.~%" con)
             (opts:exit 1)))
 
 

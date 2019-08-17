@@ -30,6 +30,8 @@ The purpose of this utility is to automate the formatting of academic articles o
 - [ ] Write full LaTeX syntax
   - [x] Main styles
   - [x] Custom layout
+  - [ ] Space between paragraphs
+  - [ ] Quote styles
   - [ ] Math functions
 
 ## How to use?

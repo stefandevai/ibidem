@@ -82,8 +82,10 @@
 
 (defun make-latex-heading (string)
   "Return a formatted string as a latex paragraph."
-  (str:concat (noindent (bold (uppercase (str:trim (str:substring 1 nil string)))))
+  (str:concat (section (uppercase (str:substring 1 nil string)))
               "~%~%"))
+;;  (str:concat (noindent (bold (uppercase (str:trim (str:substring 1 nil string)))))
+;;              "~%~%"))
 
 (defun make-latex-bold (text)
   "Return `text' with all instances of markdown bold as latex bold.
@@ -168,11 +170,13 @@
 (defun make-latex-bibliography (object)
   "Return a formatted latex bibliography.
   `object' is a `markdown-object' that contains information about the citations and sources."
-  (thebibliography
-    (reduce #'str:concat
-            (let ((citations (citations object)))
-              (loop :for citation :in citations
-                 :for index :from 1 :to (length citations)
-                 :collect (make-latex-bibliography-item citation
-                                                        index
-                                                        object))))))
+  (str:concat "\\newpage~%~%"
+              (thebibliography
+               (str:concat "\\raggedright~%"
+                           (reduce #'str:concat
+                                   (let ((citations (citations object)))
+                                     (loop :for citation :in citations
+                                        :for index :from 1 :to (length citations)
+                                        :collect (make-latex-bibliography-item citation
+                                                                               index
+                                                                               object))))))))

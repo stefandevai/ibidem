@@ -29,6 +29,15 @@
        ,@body)))
 
 (defun main ()
+  (setf *debugger-hook*
+        (lambda (condition old-hook)
+          (declare (ignore old-hook))
+          (format *error-output*
+                  "Caught error: ~a~%"
+                  condition)
+          (finish-output *error-output*)
+          (sb-ext:quit)))
+
   (opts:define-opts
     (:name :help
            :description "show this help text."
@@ -66,15 +75,15 @@
 
 
       (cond ((getf options :help)
-            (opts:describe
-             :prefix "latex-builder input_file.md -o output_file.tex"
-             :usage-of "latex-builder"
-             :args "[INPUT_FILE]"))
+             (opts:describe
+              :prefix "latex-builder input_file.md -o output_file.tex"
+              :usage-of "latex-builder"
+              :args "[INPUT_FILE]"))
             ((null (car free-args))
              (format t "Fatal: an input markdown file is required."))
             (t (progn
-              (when (getf options :output)
-                (setf output-path (getf options :output)))
-              (when (getf options :layout)
-                (setf layout-path (getf options :layout)))
-              (create (first free-args) output-path :layout layout-path)))))))
+                 (when (getf options :output)
+                   (setf output-path (getf options :output)))
+                 (when (getf options :layout)
+                   (setf layout-path (getf options :layout)))
+                 (create (first free-args) output-path :layout layout-path)))))))

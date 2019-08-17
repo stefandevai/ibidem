@@ -13,6 +13,11 @@
 (defvar +citation-style+ :apa
   "Global style for citations in biliography.")
 
+(defvar +latex-default-layout+
+  (list "\\documentclass{article}~%\\usepackage{hyperref}~%~%\\begin{document}~%~%"
+        "\\end{document}")
+  "Basic default layout in case the user hasn't provided one.")
+
 (defvar +citation-format+
   '(:apa (list :article '((author-surname-initials author)
                           (parenthesis year ". ")

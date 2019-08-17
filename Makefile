@@ -19,12 +19,12 @@ build:
 	     --end-toplevel-options "$@"
 
 .PHONY: install
-install: 
+install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
 	install -m 755 $(BIN_PATH)/$(EXECUTABLE_NAME) $(DESTDIR)$(PREFIX)/bin/
 
 .PHONY: uninstall
-uninstall: 
+uninstall:
 	rm -f $(DESTDIR)$(PREFIX)/bin/$(EXECUTABLE_NAME)
 
 .PHONY: test
@@ -40,4 +40,3 @@ run:
 	$(BIN_PATH)/$(EXECUTABLE_NAME) $(MD_FILE_PATH) -o $(LATEX_FILE_PATH)
 	pdflatex -output-directory $(LATEX_OUTPUT_DIR) $(LATEX_FILE_PATH)
 	cp $(LATEX_OUTPUT_DIR)/article.pdf $(BIN_PATH)
-

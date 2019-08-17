@@ -146,6 +146,7 @@
         (setf string (substitute-citation string citation-string citation)))
       (incf counter))
 
+    (setf (citations object) (reverse (citations object)))
     (return-from parse-citations string)))
 
 (defun parse-citation (citation-string &optional counter)

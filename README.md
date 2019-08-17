@@ -24,12 +24,12 @@ The purpose of this utility is to automate the formatting of academic articles o
 - [ ] Parse custom markdown syntax
   - [x] Parse header
   - [x] Parse bibliography
-  - [ ] Parse citations in text
+  - [x] Parse citations in text
   - [ ] Math functions
 
 - [ ] Write full LaTeX syntax
   - [x] Main styles
-  - [ ] Custom layout
+  - [x] Custom layout
   - [ ] Math functions
 
 ## How to use?

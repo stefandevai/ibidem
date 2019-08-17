@@ -8,9 +8,11 @@
   "Creates a Latex string from a `markdown-object' instance."
   (destructuring-bind (begin-str end-str) (latex-layout layout)
     (str:concat begin-str
+                "~%~%"
                 (str:concat (make-latex-header object)
                             (make-latex-body object)
                             (make-latex-bibliography object))
+                "~%"
                 end-str)))
 
 (defun latex-layout (layout)
@@ -29,13 +31,13 @@
          (start-delimiter "\\begin{document}")
          (start-index (when start-delimiter
                         (search '(#\Newline)
-                              layout-string
-                              :start2 (search start-delimiter
-                                              layout-string)))))
+                                layout-string
+                                :start2 (search start-delimiter
+                                                layout-string)))))
     (if (and start-index end-index)
         (list (str:substring 0 start-index layout-string)
               (str:substring end-index nil layout-string))
-        (error "FATAL: Layout file is badly formatted.~%"))))
+        (error "> FATAL: Layout file is badly formatted.~%"))))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Header writing                                                                               ;;;

@@ -17,6 +17,12 @@
                     (if ,newline "}~%" "}")
                     ,@body))
 
+(defmacro begin-end (arg &body body)
+  "Surround strings with `\begin{ arg }' and `\end{ arg }'."
+  `(surround-string (latex-element "begin" t ,arg)
+                    (latex-element "end" t ,arg)
+     ,@body))
+
 (defmacro parenthesis (&body body)
   "Surround strings with parenthesis."
   `(surround-string "(" ")" ,@body))
@@ -45,8 +51,12 @@
   "Surround strings with `\section{}' directive in Latex."
   `(latex-element "section*" t ,@body))
 
-(defmacro begin-end (arg &body body)
+(defmacro thebibliography (&body body)
   "Surround strings with `\begin{ arg }' and `\end{ arg }'."
-  `(surround-string (latex-element "begin" t ,arg)
-                    (latex-element "end" t ,arg)
-                    ,@body))
+  `(surround-string (latex-element "begin" t "thebibliography}{1")
+                    (latex-element "end" t "thebibliography")
+     ,@body))
+
+(defmacro bibitem (&body body)
+  "Surround strings with `\section{}' directive in Latex."
+  `(latex-element "bibitem" t ,@body))

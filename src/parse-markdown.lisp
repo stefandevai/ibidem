@@ -1,5 +1,5 @@
 ;;;; ========================================================================================== ;;;;
-;;;; write-markdown.lisp                                                                        ;;;;
+;;;; parse-markdown.lisp                                                                        ;;;;
 ;;;; ========================================================================================== ;;;;
 
 (in-package #:latex-builder)
@@ -8,7 +8,7 @@
 ;;; Helper functions and macros                                                                  ;;;
 ;;; -------------------------------------------------------------------------------------------- ;;;
 
-(defmacro with-occurrences-between (var delimiter-1 delimiter-2 string &body body)
+(defmacro do-occurrences-between (var delimiter-1 delimiter-2 string &body body)
   "Loop through `string' and store substrings between `delimiter-1' and 2`delimiter-2'
   in `var'."
   (let ((index-1 (gensym))
@@ -42,10 +42,11 @@
 
 (defun parse-quoted-param (param header-string)
   "Parse a single parameter in markdown's header with a format: `param: \"content\"'"
-  (let ((param-index (search (str:concat param ":") header-string)))
-    (if param-index
-        (string-between "\"" "\"" header-string :start (search (str:concat param ":")
-                                                         header-string)))))
+  (when param
+    (let ((param-index (search (str:concat param ":") header-string)))
+      (if param-index
+          (string-between "\"" "\"" header-string :start (search (str:concat param ":")
+                                                                 header-string))))))
 
 (defun parse-markdown (md-str)
   "Receives a markdown string and return a list with parsed contents."
@@ -109,7 +110,7 @@
   "Parse content within markdown's bibliography."
   (let ((biblio-string (string-between +d-bibliography+ +d-bibliography+ string)))
     (when biblio-string
-      (with-occurrences-between source-string
+      (do-occurrences-between source-string
           "--"
           "--"
           biblio-string
@@ -130,9 +131,38 @@
 
 (defun parse-citations (string object)
   "Parses each citation contained in `string' and push them to `citations' in `object'."
-  (with-occurrences-between citation-string
-      "c["
-      "]"
-      string
-    (pushnew citation-string (citations object)))
-  (return-from parse-citations string))
+  (let ((cl-ppcre:*allow-quoting* t)
+        (counter 1))
+    (do-occurrences-between citation-string
+        "c["
+        "]"
+        string
+      (let ((citation (parse-citation citation-string counter)))
+        (pushnew citation (citations object))
+
+        ;; TODO: Create a function that modifies the value of string
+        ;; instead of making a new copy each funcall.
+        ;; Use nsubstitute http://clhs.lisp.se/Body/f_sbs_s.htm
+        (setf string (substitute-citation string citation-string citation)))
+      (incf counter))
+
+    (return-from parse-citations string)))
+
+(defun parse-citation (citation-string &optional counter)
+  "Parse an `id'and `pages' in citation-string separated by an ':' and
+  add a counter (if provided) to the id."
+  (let* ((citation-raw (str:split ":" citation-string :omit-nulls t))
+         (first-item (car citation-raw)))
+    (if counter
+        (substitute (str:concat first-item "-" (write-to-string counter))
+                first-item
+                citation-raw
+                :test #'equal)
+        (return-from parse-citation citation-raw))))
+
+(defun substitute-citation (string citation-string citation)
+  "Return a string with the original citation-string substituted with a
+  LaTeX citation."
+  (ppcre:regex-replace (concatenate 'string "\\Qc[" citation-string "]")
+                       string
+                       (latex-element "cite" nil (car citation))))

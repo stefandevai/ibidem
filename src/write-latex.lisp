@@ -6,7 +6,7 @@
 
 (defun make-latex-article (object)
   "Creates a Latex string from a `markdown-object' instance."
-  (let ((begin-str "\\documentclass[12pt]{article}~%\\usepackage{crimson}~%\\usepackage[T1]{fontenc}~%\\usepackage[french]{babel}~%\\usepackage{geometry}~%\\geometry{a4paper, margin=1in}~%~%\\renewcommand{\\tiny}{\\normalsize}~%\\renewcommand{\\footnotesize}{\\normalsize}~%\\renewcommand{\\small}{\\normalsize}~%\\renewcommand{\\large}{\\normalsize}~%\\renewcommand{\\Large}{\\normalsize}~%\\renewcommand{\\LARGE}{\\normalsize}~%\\renewcommand{\\huge}{\\normalsize}~%\\renewcommand{\\Huge}{\\normalsize}~%~%\\begin{document}~%~%")
+  (let ((begin-str "\\documentclass[12pt]{article}~%\\usepackage{crimson}~%\\usepackage[utf8]{inputenc}~%\\usepackage[T1]{fontenc}~%\\usepackage[french]{babel}~%\\usepackage{hyperref}~%\\usepackage{geometry}~%\\geometry{a4paper, margin=1in}~%~%\\renewcommand{\\tiny}{\\normalsize}~%\\renewcommand{\\footnotesize}{\\normalsize}~%\\renewcommand{\\small}{\\normalsize}~%\\renewcommand{\\large}{\\normalsize}~%\\renewcommand{\\Large}{\\normalsize}~%\\renewcommand{\\LARGE}{\\normalsize}~%\\renewcommand{\\huge}{\\normalsize}~%\\renewcommand{\\Huge}{\\normalsize}~%~%\\begin{document}~%~%")
         (end-str "\\end{document}~%"))
     (str:concat begin-str
                 (str:concat (make-latex-header object)
@@ -109,35 +109,35 @@
                         (mapcar (lambda (name) (str:concat (str:s-first name) ". "))
                                 (reverse (cdr (reverse names))))))))
 
+
+
 (defun get-citation-source (citation-id sources)
   "Return a `citation-source' from `sources' list where its id is equal to `citation-id'."
-  (find-if (lambda (x) (string= citation-id (id x))) sources))
+  (let* ((citation-id (subseq citation-id 0 (search "-" citation-id))))
+        (find-if (lambda (x) (string= citation-id (id x))) sources)))
 
-(defun make-citation (string sources)
+(defun make-citation (citation sources)
   "Return a formatted latex citation.
   `string' cointains information about the citation as \"citation-id:pages\";
   `sources' contains a list of `citation-source'."
-  (let ((citation-data (str:split ":" string)))
-    (str:concat
-     (build-citation
-      (get-citation-source (car citation-data) sources)))))
+  (str:concat
+   (build-citation
+    (get-citation-source (car citation) sources))))
 
-(defun make-latex-bibliography-item (citation-string index object)
+(defun make-latex-bibliography-item (citation index object)
   "Return a formatted latex bibliography item."
-    (str:concat "["
-                (write-to-string index)
-                "] "
-                (make-citation citation-string (bibliography object))
+    (str:concat (bibitem (car citation))
+                (make-citation citation (bibliography object))
                 "~%~%"))
 
 (defun make-latex-bibliography (object)
   "Return a formatted latex bibliography.
   `object' is a `markdown-object' that contains information about the citations and sources."
-  (str:concat (section "Bibliography")
-              (reduce #'str:concat
-                      (let ((citations (citations object)))
-                        (loop :for citation :in citations
-                           :for index :from 1 :to (length citations)
-                           :collect (make-latex-bibliography-item citation
-                                                                  index
-                                                                  object))))))
+  (thebibliography
+    (reduce #'str:concat
+            (let ((citations (citations object)))
+              (loop :for citation :in citations
+                 :for index :from 1 :to (length citations)
+                 :collect (make-latex-bibliography-item citation
+                                                        index
+                                                        object))))))

@@ -83,12 +83,15 @@
 (defmacro build-citation (source)
   "Builds a single citation according to a format provided in `source'."
   (let ((style-params (getf +citation-format+
-                            +citation-style+)))
-    `(let ((params (getf ,style-params (read-from-string (str:concat ":"
-                                                                     (slot-value ,source
-                                                                     'ctype))))))
+                            +citation-style+))
+        (params (gensym)))
+    `(let ((,params (getf ,style-params
+                          (read-from-string
+                          (str:concat ":"
+                                      (slot-value ,source
+                                      'ctype))))))
        (reduce #'str:concat
-               (loop :for param :in params
+               (loop :for param :in ,params
                   :collect (cond ((listp param)
                                   (str:concat (eval (list (car param)
                                                           (slot-value ,source
@@ -124,10 +127,17 @@
    (build-citation
     (get-citation-source (car citation) sources))))
 
+(defun make-citation-pages (pages)
+  (print pages)
+  (if (or (position #\, pages) (position #\- pages))
+      (str:concat "pp. " pages ". ")
+      (str:concat "p. " pages ". " )))
+
 (defun make-latex-bibliography-item (citation index object)
   "Return a formatted latex bibliography item."
     (str:concat (bibitem (car citation))
                 (make-citation citation (bibliography object))
+                (when (> (length citation) 1) (make-citation-pages (cadr citation)))
                 "~%~%"))
 
 (defun make-latex-bibliography (object)

@@ -52,7 +52,7 @@
   `(latex-element "section*" t ,@body))
 
 (defmacro thebibliography (&body body)
-  "Surround strings with `\begin{ arg }' and `\end{ arg }'."
+  "Surround strings with `\begin{thebibliography}{1}' and `\end{thebibliography}'."
   `(surround-string (latex-element "begin" t "thebibliography}{1")
                     (latex-element "end" t "thebibliography")
      ,@body))

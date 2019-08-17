@@ -134,9 +134,9 @@
   (let ((cl-ppcre:*allow-quoting* t)
         (counter 1))
     (do-occurrences-between citation-string
-        "c["
-        "]"
-        string
+      "c["
+      "]"
+      string
       (let ((citation (parse-citation citation-string counter)))
         (pushnew citation (citations object))
 

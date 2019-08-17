@@ -4,21 +4,24 @@
 
 (in-package #:latex-builder)
 
-(defvar +d-bibliography+ "~--"
-  "Custom markdown delimiter for the bibliography section.")
+(defvar *delimiter-bibliography-start* "~~~bibliography"
+  "Custom markdown delimiter for the start of bibliography's section.")
 
-(defvar +d-citation-source+ "--"
+(defvar *delimiter-bibliography-end* "~~~"
+  "Custom markdown delimiter for the end of bibliography's section.")
+
+(defvar *delimiter-default* "---"
   "Custom markdown delimiter for a single citation source.")
 
-(defvar +citation-style+ :apa
+(defvar *citation-style* :apa
   "Global style for citations in biliography.")
 
-(defvar +latex-default-layout+
+(defvar *latex-default-layout*
   (list "\\documentclass{article}~%\\usepackage{hyperref}~%~%\\begin{document}~%~%"
         "\\end{document}")
   "Basic default layout in case the user hasn't provided one.")
 
-(defvar +citation-format+
+(defvar *citation-format*
   '(:apa (list
           :article '((author-surname-initials author)
                      (parenthesis year ". ")

@@ -112,7 +112,7 @@
               :usage-of "latex-builder"
               :args "[INPUT_FILE]"))
             ((null (car free-args))
-             (format t "FATAL: an input markdown file is required."))
+             (format t "> FATAL: an input markdown file is required.~%"))
             (t (progn
                  (when (getf options :output)
                    (setf output-path (getf options :output)))

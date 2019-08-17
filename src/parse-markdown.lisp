@@ -62,7 +62,7 @@
 
 (defun parse-header (string object)
   "Parse content within markdown's header."
-  (let ((header-string (string-between "---" "---" string)))
+  (let ((header-string (string-between *delimiter-default* *delimiter-default* string)))
     (setf (author object) (parse-quoted-param "author" header-string))
     (setf (date object) (parse-quoted-param "date" header-string))
     (setf (location object) (parse-quoted-param "location" header-string))))
@@ -77,11 +77,11 @@
   ;; Checks if there is a bibliography section;
   ;; if there is, body string is the section in between;
   ;; otherwise it's the string after the header until the end-of-file.
-  (let* ((has-bibliography? (string-between "~--" "~--" string))
+  (let* ((has-bibliography? (string-between *delimiter-bibliography-start* *delimiter-bibliography-end* string))
          (body-string (if has-bibliography?
-                          (parse-citations (string-between "---" "~--" string :start 3)
+                          (parse-citations (string-between *delimiter-default* *delimiter-bibliography-start* string :start 3)
                                            object)
-                          (string-between "---" nil string :start 3))))
+                          (string-between *delimiter-default* nil string :start 3))))
     (setf (body object)
           (remove nil
                   (mapcar 'parse-body-line
@@ -108,11 +108,11 @@
 
 (defun parse-bibliography (string object)
   "Parse content within markdown's bibliography."
-  (let ((biblio-string (string-between +d-bibliography+ +d-bibliography+ string)))
+  (let ((biblio-string (string-between *delimiter-bibliography-start* *delimiter-bibliography-end* string)))
     (when biblio-string
       (do-occurrences-between source-string
-          "--"
-          "--"
+          "---"
+          "---"
           biblio-string
         (pushnew (parse-citation-source source-string) (bibliography object))))))
 

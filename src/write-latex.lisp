@@ -18,7 +18,7 @@
 (defun latex-layout (layout)
   "Return a LaTeX layout list with two strings to surround the article."
   (if (null layout)
-      (list +latex-default-layout+)
+      (list *latex-default-layout*)
       (latex-layout-from-file layout)))
 
 (defun latex-layout-from-file (file-path)
@@ -107,8 +107,8 @@
 
 (defmacro build-citation (source)
   "Builds a single citation according to a format provided in `source'."
-  (let ((style-params (getf +citation-format+
-                            +citation-style+))
+  (let ((style-params (getf *citation-format*
+                            *citation-style*))
         (params (gensym)))
     `(let ((,params (getf ,style-params
                           (read-from-string

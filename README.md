@@ -77,9 +77,9 @@ location: "A location"
 
 If we want to have citations in our text, we can write a bibliography block. This can usually be placed at the end of the file:
 
-~~~markdown
-~--
---
+```markdown
+~~~bibliography
+---
 id: "[source-unique-id]"
 type: "[citation-type]"
 author: "Author's Full Name"
@@ -87,9 +87,9 @@ title: "Source's Title"
 journal: "Source's Journal"
 year: "Publication year"
 volume-issue: "[volume]([issue])"
---
+---
 
---
+---
 id: "jacoby"
 type: "article"
 author: "William G. Jacoby"
@@ -97,27 +97,28 @@ title: "Public attitudes toward government spending"
 journal: "American Journal of Political Science"
 year: "1994"
 volume-issue: "38(2)"
---
-~--
+---
 ~~~
+```
 
 Each block piece is described in isolation here:
 
-~~~markdown
-~--
+```markdown
+~~~bibliography
 [This is a bibliography block. It expects citation source blocks.]
-~--
-
-~--
---
-[This is a citation source block. It expects parameters about a single source.]
---
-
---
-[You can have multiple citation source blocks.]
---
-~--
 ~~~
+
+~~~bibliography
+---
+[This is a citation source block. It expects parameters about a single source.]
+---
+
+---
+[You can have multiple citation source blocks.]
+---
+~~~
+```
+
 ### Citation
 
 Within the text, you can have citations in the following format:

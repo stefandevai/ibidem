@@ -4,15 +4,38 @@
 
 (in-package #:latex-builder)
 
-(defun make-latex-article (object)
+(defun make-latex-article (object &optional layout)
   "Creates a Latex string from a `markdown-object' instance."
-  (let ((begin-str "\\documentclass[12pt]{article}~%\\usepackage{crimson}~%\\usepackage[utf8]{inputenc}~%\\usepackage[T1]{fontenc}~%\\usepackage[french]{babel}~%\\usepackage{hyperref}~%\\usepackage{geometry}~%\\geometry{a4paper, margin=1in}~%~%\\renewcommand{\\tiny}{\\normalsize}~%\\renewcommand{\\footnotesize}{\\normalsize}~%\\renewcommand{\\small}{\\normalsize}~%\\renewcommand{\\large}{\\normalsize}~%\\renewcommand{\\Large}{\\normalsize}~%\\renewcommand{\\LARGE}{\\normalsize}~%\\renewcommand{\\huge}{\\normalsize}~%\\renewcommand{\\Huge}{\\normalsize}~%~%\\begin{document}~%~%")
-        (end-str "\\end{document}~%"))
+  (destructuring-bind (begin-str end-str) (latex-layout layout)
+
+;;  (let ((begin-str "\\documentclass[12pt]{article}~%\\usepackage{crimson}~%\\usepackage[utf8]{inputenc}~%\\usepackage[T1]{fontenc}~%\\usepackage[french]{babel}~%\\usepackage{hyperref}~%\\usepackage{geometry}~%\\geometry{a4paper, margin=1in}~%~%\\renewcommand{\\tiny}{\\normalsize}~%\\renewcommand{\\footnotesize}{\\normalsize}~%\\renewcommand{\\small}{\\normalsize}~%\\renewcommand{\\large}{\\normalsize}~%\\renewcommand{\\Large}{\\normalsize}~%\\renewcommand{\\LARGE}{\\normalsize}~%\\renewcommand{\\huge}{\\normalsize}~%\\renewcommand{\\Huge}{\\normalsize}~%~%\\begin{document}~%~%")
+;;        (end-str "\\end{document}~%"))
+    (print begin-str)
     (str:concat begin-str
                 (str:concat (make-latex-header object)
                             (make-latex-body object)
                             (make-latex-bibliography object))
                 end-str)))
+
+(defun latex-layout (layout)
+  (if (null layout)
+      (list "\\documentclass{article}~%\\usepackage{hyperref}~%~%\\begin{document}~%~%" "\\end{document}")
+      (latex-layout-from-file layout)))
+
+(defun latex-layout-from-file (file-path)
+  (let* ((layout-string (uiop:read-file-string file-path))
+
+         (end-delimiter "\\end{document}")
+         (end-index (search end-delimiter layout-string))
+
+         (start-delimiter "\\begin{document}")
+         (start-index (search '(#\Newline)
+                              layout-string
+                              :start2 (search start-delimiter
+                                              layout-string))))
+
+    (list (str:substring 0 start-index layout-string)
+          (str:substring end-index nil layout-string))))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Header writing                                                                               ;;;

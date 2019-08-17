@@ -17,16 +17,47 @@
 (defun create (input-path output-path &key (layout nil))
   "Receive a Markdown (.md) file as input and outputs a Latex (.tex) to a file."
   (let ((object (parse-markdown (uiop:read-file-string input-path))))
-    (write-to-file (make-latex-article object layout) output-path)))
+    (write-to-file (make-latex-article object layout) output-path))
+  (format t "> SUCCESS: Created ~A~%" output-path))
 
 (defun unknown-option (condition)
-  (format t "warning: ~s option is unknown!~%" (opts:option condition))
+  (format t "> WARNING: ~s option is unknown!~%" (opts:option condition))
   (invoke-restart 'opts:skip-option))
 
 (defmacro when-option ((options opt) &body body)
   `(let ((it (getf ,options ,opt)))
      (when it
        ,@body)))
+
+(defun print-intro ()
+  (format t "
+
+\`7XXF\'            XXP\"\"XX\"\"YXX    \`YXX\'   \`XP\'
+  XX              P'   XX   `7      VXb.  ,P
+  XX         ,6\"Yb.    XX  .gP\"Ya    \`XX.X\'
+  XX        8)   XX    XX ,X\'   Yb     XXb
+  XX      ,  ,pm9XX    XX 8X\"\"\"\"\"\"   ,X\'\`Xb.
+  XX     ,X 8X   XX    XX YX.    ,  ,P   \`XX.
+.JXXmmmmXXX \`Xoo9^Yo..JXXL.\`Xbmmd\'.XX:.  .:XXa.
+
+
+                         ,,    ,,        ,,
+`7XX\"\"\"Yp,               db  \`7XX      \`7XX
+  XX    Yb                     XX        XX
+  XX    dP \`7XX  \`7XX  \`7XX    XX   ,X\"\"bXX  .gP\"Ya \`7Xb,od8
+  XX\"\"\"bg.   XX    XX    XX    XX ,AP    XX ,X\'   Yb  XX\' \"\'
+  XX    \`Y   XX    XX    XX    XX 8XI    XX 8X\"\"\"\"\"\"  XX
+  XX    ,9   XX    XX    XX    XX \`Xb    XX YX.    ,  XX
+.JXXmmmd9    \`Xbod\"YXL..JXXL..JXXL.\`Wbmd\"XXL.\`Xbmmd\'.JXXL.
+
+
+  Latex formatting automation.
+
+  ================================================================
+  AUTHOR: Stefan Devai
+  WEBSITE: https://stefandevai.me/
+  SOURCE CODE: https://github.com/stefandevai/latex-builder
+  ================================================================~%~%~%~%"))
 
 (defun main ()
   (setf *debugger-hook*
@@ -63,14 +94,14 @@
             (handler-bind ((opts:unknown-option #'unknown-option))
               (opts:get-opts))
           (opts:missing-arg (condition)
-            (format t "Fatal: option ~s needs an argument.~%"
+            (format t "FATAL: option ~s needs an argument.~%"
                     (opts:option condition)))
           (opts:arg-parser-failed (condition)
-            (format t "Fatal: cannot parse ~s as argument of ~s.~%"
+            (format t "FATAL: cannot parse ~s as argument of ~s.~%"
                     (opts:raw-arg condition)
                     (opts:option condition)))
           (opts:missing-required-option (con)
-            (format t "Fatal: ~a is required.~%" con)
+            (format t "FATAL: ~a is required.~%" con)
             (opts:exit 1)))
 
 
@@ -80,10 +111,11 @@
               :usage-of "latex-builder"
               :args "[INPUT_FILE]"))
             ((null (car free-args))
-             (format t "Fatal: an input markdown file is required."))
+             (format t "FATAL: an input markdown file is required."))
             (t (progn
                  (when (getf options :output)
                    (setf output-path (getf options :output)))
                  (when (getf options :layout)
                    (setf layout-path (getf options :layout)))
+                 (print-intro)
                  (create (first free-args) output-path :layout layout-path)))))))

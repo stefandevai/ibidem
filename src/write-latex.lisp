@@ -68,13 +68,24 @@
   according with the body `line-type'."
   (ecase (getf line :line-type)
     (:paragraph (make-latex-paragraph (getf line :content)))
+    (:list (make-latex-list (getf line :content)))
     (:section (make-latex-section (getf line :content)))
+    (:subsection (make-latex-section (getf line :content)))
+    (:subsubsection (make-latex-section (getf line :content)))
     (:heading (make-latex-heading (getf line :content)))))
 
 (defun make-latex-paragraph (string)
   "Return a formatted string as latex paragraph."
   (str:concat (make-latex-emphasis (make-latex-bold string))
               "~%~%"))
+
+(defun make-latex-list (items)
+  (begin-end "itemize" (reduce #'str:concat
+                               (mapcar #'(lambda (line)
+                                 (str:concat "\\item "
+                                             (str:substring 1 nil (str:trim-left line))
+                                             "~%"))
+                               items))))
 
 (defun make-latex-section (string)
   "Return a formatted string as a latex section."

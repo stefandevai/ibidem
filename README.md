@@ -21,18 +21,16 @@ The purpose of this utility is to automate the formatting of academic articles o
   - [ ] Parse lists
   - [ ] Parse links
  
-- [ ] Parse custom markdown syntax
+- [x] Parse custom markdown syntax
   - [x] Parse header
   - [x] Parse bibliography
   - [x] Parse citations in text
-  - [ ] Math functions
 
 - [ ] Write full LaTeX syntax
   - [x] Main styles
   - [x] Custom layout
-  - [ ] Space between paragraphs
+  - [x] Space between paragraphs
   - [ ] Quote styles
-  - [ ] Math functions
 
 ## How to use?
 

@@ -79,13 +79,36 @@
   ;; otherwise it's the string after the header until the end-of-file.
   (let* ((has-bibliography? (string-between *delimiter-bibliography-start* *delimiter-bibliography-end* string))
          (body-string (if has-bibliography?
-                          (parse-citations (string-between *delimiter-default* *delimiter-bibliography-start* string :start 3)
+                          (parse-citations (string-between *delimiter-default*
+                                                           *delimiter-bibliography-start*
+                                                           string
+                                                           :start 3)
                                            object)
                           (string-between *delimiter-default* nil string :start 3))))
-    (setf (body object)
-          (remove nil
-                  (mapcar 'parse-body-line
-                          (str:lines body-string))))))
+    (setf (body object) (parse-body-lines body-string))))
+
+(defun parse-body-lines (string)
+  (remove nil
+          (let* ((lines (str:lines string))
+                 (types (mapcar #'body-line-type lines))
+                 (llength (length lines)))
+
+            (loop :with content := nil
+               :for index :from 0 :below llength
+
+               :if (equal :list-item (elt types index))
+               :do (let ((md-list (list :line-type :list
+                                        :content (loop :for i :from index :below llength
+                                                    :until (not (equal ':list-item (elt types i)))
+                                                    :collecting (elt lines i)))))
+                     (setq content md-list)
+                     (setq index (+ index (length md-list))))
+
+               :else :do (if (str:empty? (elt lines index))
+                             (setq content nil)
+                             (setq content (list :line-type (elt types index)
+                                                 :content (elt lines index))))
+               :collect content))))
 
 (defun parse-body-line (str)
   "Parse a single line in markdown's body."
@@ -94,13 +117,35 @@
       nil))
 
 (defun body-line-type (str)
-  "Defines a type for a markdown line. If it starts by #, it is a heading; if it starts by ## it is
-  a section; otherwise it is a paragraph."
-  (if (>= (length str) 2)
-      (let ((begin-str (str:substring 0 2 str)))
-        (cond ((equal begin-str "##") ':section) ; if (starts by "##")
-              ((equal begin-str "# ") ':heading) ; else if (starts by "# ")
-              (t ':paragraph)))))                ; else
+  "Defines a type for a markdown line. If it starts by:
+  ####, it is a subsubsection;
+  ###, it is a subsection;
+  ##, it is a section;
+  # , it is a heading;
+  $, it is a math formulation;
+  - , it a list item;
+  otherwise it is a paragraph."
+  (if (>= (length (str:trim str)) 2)
+      (let* ((trimmed-str (str:trim-left str))
+             (begin-str (str:substring 0 2 trimmed-str)))
+        (cond ((and (>= (length trimmed-str) 4)
+                   (equal (str:substring 0 4 trimmed-str) "####"))
+               ':subsubsection)
+              ((and (>= (length trimmed-str) 3)
+                   (equal (str:substring 0 3 trimmed-str) "###"))
+               ':subsection)
+              ((equal begin-str "##")
+               ':section)
+              ((equal begin-str "# ")
+               ':heading)
+              ((char= (char begin-str 0) #\$)
+               ':maths)
+              ((and (char= (char begin-str 0) #\-)
+                  (char= (char begin-str 1) #\Space))
+               ':list-item)
+              (t ':paragraph)))
+      ':paragraph))
+
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Bibliography parsing                                                                         ;;;

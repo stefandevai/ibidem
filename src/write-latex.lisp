@@ -45,15 +45,16 @@
 
 (defun make-latex-header (object)
   "Receive a `markdown-object' and return a formatted latex header string."
-  (begin-end "flushright"
-             (if (author object) (make-latex-header-item (author object)))
-             (if (location object) (make-latex-header-item (location object)))
-             (if (date object) (make-latex-header-item (date object)))))
+  (str:concat (begin-end "flushright"
+                (if (author object) (make-latex-header-item (author object)))
+                (if (location object) (make-latex-header-item (location object)))
+                (if (date object) (make-latex-header-item (date object))))
+              "~%~%"))
+
 
 (defun make-latex-header-item (item)
   "Receive a single header item and return a formatted latex string."
   (str:concat (bold item) "~%"  *linebreak*))
-
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Body writing                                                                                 ;;;
@@ -66,44 +67,61 @@
 (defun make-latex-body-line (line)
   "Receive a single body line and return a formatted latex string
   according with the body `line-type'."
-  (ecase (getf line :line-type)
-    (:paragraph (make-latex-paragraph (getf line :content)))
-    (:list (make-latex-list (getf line :content)))
-    (:section (make-latex-section (getf line :content)))
-    (:subsection (make-latex-section (getf line :content)))
-    (:subsubsection (make-latex-section (getf line :content)))
-    (:quote (make-latex-quote (getf line :content)))
-    (:heading (make-latex-heading (getf line :content)))))
-
-(defun make-latex-paragraph (string)
-  "Return a formatted string as latex paragraph."
-  (str:concat (make-latex-emphasis (make-latex-bold string))
-              "~%~%"))
+  (str::concat
+   (make-latex-emphasis
+    (make-latex-bold
+     (ecase (getf line :line-type)
+       (:paragraph (getf line :content))
+       (:list (make-latex-list (getf line :content)))
+       (:section (make-latex-heading (getf line :content) 1))
+       (:subsection (make-latex-heading (getf line :content) 2))
+       (:subsubsection (make-latex-heading (getf line :content) 3))
+       (:quote (make-latex-quote (getf line :content))))))
+   "~%~%"))
 
 (defun make-latex-quote (string)
   "Return a formatted string as latex quote."
-  (begin-end "quote" (textit string)))
+  (begin-end "quote"
+    (textit
+      (str:concat
+       (str:substring
+        (position-if-not
+         #'(lambda (c) (char= c #\Space))
+         (str:trim-left string)
+         :start 1)
+        nil
+        string)
+       "~%"))))
 
 (defun make-latex-list (items)
   "Return a formatted string as a latex list of `items'."
-  (begin-end "itemize" (reduce #'str:concat
-                               (mapcar #'(lambda (line)
-                                 (str:concat "\\item "
-                                             (str:substring 1 nil (str:trim-left line))
-                                             "~%"))
-                               items))))
+  (begin-end "itemize"
+    (reduce
+     #'str:concat
+     (mapcar
+      #'(lambda (line)
+          (str:concat "\\item "
+                      (str:substring 1 nil (str:trim-left line))
+                      "~%"))
+      items))))
 
-(defun make-latex-section (string)
-  "Return a formatted string as a latex section."
-  (str:concat (section (str:trim (str:substring 2 nil string)))
-              "~%"))
+;;(defun make-latex-section (string)
+  ;;"Return a formatted string as a latex section."
+;;  (section (str:trim-left (str:substring 2 nil string))))
 
-(defun make-latex-heading (string)
+(defun make-latex-heading (string section-depth)
   "Return a formatted string as a latex paragraph."
-  (str:concat (section (uppercase (str:substring 1 nil string)))
-              "~%~%"))
-;;  (str:concat (noindent (bold (uppercase (str:trim (str:substring 1 nil string)))))
-;;              "~%~%"))
+  (let* ((section-str (case section-depth
+                       (1 "section*")
+                       (2 "subsection*")
+                       (otherwise "subsubsection*")))
+        (trimmed-heading (str:trim-left string))
+        (space-index (if (> section-depth 2)
+                         (position #\Space trimmed-heading)
+                         section-depth)))
+
+    (latex-element section-str nil
+      (str:trim-left (str:substring space-index nil trimmed-heading)))))
 
 (defun make-latex-bold (text)
   "Return `text' with all instances of markdown bold as latex bold.

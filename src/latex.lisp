@@ -20,7 +20,7 @@
 (defmacro begin-end (arg &body body)
   "Surround strings with `\begin{ arg }' and `\end{ arg }'."
   `(surround-string (latex-element "begin" t ,arg)
-                    (latex-element "end" t ,arg)
+                    (latex-element "end" nil ,arg)
      ,@body))
 
 (defmacro parenthesis (&body body)
@@ -53,7 +53,7 @@
 
 (defmacro section (&body body)
   "Surround strings with `\section{}' directive in Latex."
-  `(latex-element "section*" t ,@body))
+  `(latex-element "section*" nil ,@body))
 
 (defmacro thebibliography (&body body)
   "Surround strings with `\begin{thebibliography}{1}' and `\end{thebibliography}'."

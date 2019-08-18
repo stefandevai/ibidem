@@ -125,27 +125,24 @@
   # , it is a heading;
   $, it is a math formulation;
   - , it a list item;
+  > , it a quote;
   otherwise it is a paragraph."
   (if (>= (length (str:trim str)) 2)
       (let* ((trimmed-str (str:trim str))
              (begin-str (str:substring 0 2 trimmed-str)))
-        (cond ((and (>= (length trimmed-str) 4)
-                   (equal (str:substring 0 4 trimmed-str) "####"))
-               ':subsubsection)
-              ((and (>= (length trimmed-str) 3)
+        (cond ((and (>= (length trimmed-str) 3)
                    (equal (str:substring 0 3 trimmed-str) "###"))
-               ':subsection)
+               ':subsubsection)
               ((equal begin-str "##")
-               ':section)
+               ':subsection)
               ((equal begin-str "# ")
-               ':heading)
+               ':section)
               ((char= (char begin-str 0) #\$)
                ':maths)
               ((and (char= (char begin-str 0) #\-)
                   (char= (char begin-str 1) #\Space))
                ':list-item)
-              ((or (char= (char trimmed-str 0) #\")
-                 (char= (char trimmed-str 0) #\“))
+              ((char= (char trimmed-str 0) #\>)
                ':quote)
               (t ':paragraph)))
       ':paragraph))

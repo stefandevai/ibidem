@@ -72,6 +72,7 @@
     (:section (make-latex-section (getf line :content)))
     (:subsection (make-latex-section (getf line :content)))
     (:subsubsection (make-latex-section (getf line :content)))
+    (:quote (make-latex-quote (getf line :content)))
     (:heading (make-latex-heading (getf line :content)))))
 
 (defun make-latex-paragraph (string)
@@ -79,7 +80,12 @@
   (str:concat (make-latex-emphasis (make-latex-bold string))
               "~%~%"))
 
+(defun make-latex-quote (string)
+  "Return a formatted string as latex quote."
+  (begin-end "quote" (textit string)))
+
 (defun make-latex-list (items)
+  "Return a formatted string as a latex list of `items'."
   (begin-end "itemize" (reduce #'str:concat
                                (mapcar #'(lambda (line)
                                  (str:concat "\\item "
@@ -89,7 +95,8 @@
 
 (defun make-latex-section (string)
   "Return a formatted string as a latex section."
-  (section (str:trim (str:substring 2 nil string))))
+  (str:concat (section (str:trim (str:substring 2 nil string)))
+              "~%"))
 
 (defun make-latex-heading (string)
   "Return a formatted string as a latex paragraph."

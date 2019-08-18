@@ -17,9 +17,12 @@ The purpose of this utility is to automate the formatting of academic articles o
   - [x] Parse bold
   - [x] Parse italics
   - [x] Parse bold-italics
-  - [x] Parse headers ("#" and "##")
-  - [ ] Parse lists
+  - [x] Parse headers ("#","##", "###" and "####")
+  - [x] Parse lists
+  - [x] Parse math formulas
+  - [x] Parse quotes
   - [ ] Parse links
+  - [ ] Parse images
  
 - [x] Parse custom markdown syntax
   - [x] Parse header
@@ -30,7 +33,8 @@ The purpose of this utility is to automate the formatting of academic articles o
   - [x] Main styles
   - [x] Custom layout
   - [x] Space between paragraphs
-  - [ ] Quote styles
+  - [x] Lists
+  - [x] Quote styles
 
 ## How to use?
 

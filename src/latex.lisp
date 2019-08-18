@@ -31,6 +31,10 @@
   "Surround strings with `\textbf{}' directive in Latex."
   `(latex-element "textbf" nil ,@body))
 
+(defmacro textit (&body body)
+  "Surround strings with `\textit{}' directive in Latex."
+  `(latex-element "textit" nil ,@body))
+
 (defmacro emph (&body body)
   "Emphasizes strings with `\emph{}' directive in Latex."
   `(latex-element "emph" nil ,@body))

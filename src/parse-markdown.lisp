@@ -88,6 +88,7 @@
     (setf (body object) (parse-body-lines body-string))))
 
 (defun parse-body-lines (string)
+  "Loop through lines in `string' and return a tree of markdown elements."
   (remove nil
           (let* ((lines (str:lines string))
                  (types (mapcar #'body-line-type lines))
@@ -126,7 +127,7 @@
   - , it a list item;
   otherwise it is a paragraph."
   (if (>= (length (str:trim str)) 2)
-      (let* ((trimmed-str (str:trim-left str))
+      (let* ((trimmed-str (str:trim str))
              (begin-str (str:substring 0 2 trimmed-str)))
         (cond ((and (>= (length trimmed-str) 4)
                    (equal (str:substring 0 4 trimmed-str) "####"))
@@ -143,6 +144,9 @@
               ((and (char= (char begin-str 0) #\-)
                   (char= (char begin-str 1) #\Space))
                ':list-item)
+              ((or (char= (char trimmed-str 0) #\")
+                 (char= (char trimmed-str 0) #\“))
+               ':quote)
               (t ':paragraph)))
       ':paragraph))
 

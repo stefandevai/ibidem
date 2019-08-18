@@ -11,7 +11,7 @@
   :depends-on (#:rove #:str #:cl-ppcre #:unix-opts)
   :components ((:file "test/package-test")
 
-               (:file "src/definitions")
+               (:file "src/config")
                (:file "src/latex")
                (:file "src/parse-markdown")
                (:file "src/write-latex")

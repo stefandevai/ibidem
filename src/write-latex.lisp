@@ -18,7 +18,7 @@
 (defun latex-layout (layout)
   "Return a LaTeX layout list with two strings to surround the article."
   (if (null layout)
-      (list *latex-default-layout*)
+      *latex-default-layout*
       (latex-layout-from-file layout)))
 
 (defun latex-layout-from-file (file-path)
@@ -106,10 +106,6 @@
                       "~%"))
       items))))
 
-;;(defun make-latex-section (string)
-  ;;"Return a formatted string as a latex section."
-;;  (section (str:trim-left (str:substring 2 nil string))))
-
 (defun make-latex-heading (string section-depth)
   "Return a formatted string as a latex paragraph."
   (let* ((section-str (case section-depth
@@ -127,8 +123,6 @@
 (defun latex-escape (text)
   "Return `text' with escaped LaTeX special characters."
   (ppcre:regex-replace-all "(?<!~)([%])" text "\\\\\\1"))
-;;  (let ((special-chars '(#\& #\% #\$ #\# #\_ #\{ #\} #\~ #\^ #\\)))
-  ;;  (map 'string )))
 
 (defun make-latex-bold (text)
   "Return `text' with all instances of markdown bold as latex bold.
@@ -213,13 +207,13 @@
 (defun make-latex-bibliography (object)
   "Return a formatted latex bibliography.
   `object' is a `markdown-object' that contains information about the citations and sources."
-  (str:concat "\\newpage~%~%"
-              (thebibliography
-               (str:concat "\\raggedright~%"
-                           (reduce #'str:concat
-                                   (let ((citations (citations object)))
-                                     (loop :for citation :in citations
-                                        :for index :from 1 :to (length citations)
-                                        :collect (make-latex-bibliography-item citation
-                                                                               index
-                                                                               object))))))))
+  (str:concat
+   "\\newpage~%~%"
+   (thebibliography
+     (str:concat
+      "\\raggedright~%"
+      (reduce #'str:concat
+              (let ((citations (citations object)))
+                (loop :for citation :in citations
+                   :for index :from 1 :to (length citations)
+                   :collect (make-latex-bibliography-item citation index object))))))))

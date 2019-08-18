@@ -12,7 +12,7 @@
   :components ((:module "src"
                 :components
                 ((:file "package")
-                 (:file "definitions")
+                 (:file "config")
                  (:file "latex")
                  (:file "parse-markdown")
                  (:file "write-latex")

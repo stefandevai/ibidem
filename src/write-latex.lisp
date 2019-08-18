@@ -70,13 +70,14 @@
   (str::concat
    (make-latex-emphasis
     (make-latex-bold
-     (ecase (getf line :line-type)
-       (:paragraph (getf line :content))
-       (:list (make-latex-list (getf line :content)))
-       (:section (make-latex-heading (getf line :content) 1))
-       (:subsection (make-latex-heading (getf line :content) 2))
-       (:subsubsection (make-latex-heading (getf line :content) 3))
-       (:quote (make-latex-quote (getf line :content))))))
+     (latex-escape
+      (ecase (getf line :line-type)
+        (:paragraph (getf line :content))
+        (:list (make-latex-list (getf line :content)))
+        (:section (make-latex-heading (getf line :content) 1))
+        (:subsection (make-latex-heading (getf line :content) 2))
+        (:subsubsection (make-latex-heading (getf line :content) 3))
+        (:quote (make-latex-quote (getf line :content)))))))
    "~%~%"))
 
 (defun make-latex-quote (string)
@@ -122,6 +123,12 @@
 
     (latex-element section-str nil
       (str:trim-left (str:substring space-index nil trimmed-heading)))))
+
+(defun latex-escape (text)
+  "Return `text' with escaped LaTeX special characters."
+  (ppcre:regex-replace-all "(?<!~)([%])" text "\\\\\\1"))
+;;  (let ((special-chars '(#\& #\% #\$ #\# #\_ #\{ #\} #\~ #\^ #\\)))
+  ;;  (map 'string )))
 
 (defun make-latex-bold (text)
   "Return `text' with all instances of markdown bold as latex bold.

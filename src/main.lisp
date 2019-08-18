@@ -43,13 +43,13 @@
 .JXXmmmd9    \`Xbod\"YXL..JXXL..JXXL.\`Wbmd\"XXL.\`Xbmmd\'.JXXL.
 
 
-  Latex formatting automation.
+ Latex formatting automation.
 
-  ================================================================
-  AUTHOR: Stefan Devai
-  WEBSITE: https://stefandevai.me/
-  SOURCE: https://github.com/stefandevai/latex-builder
-  ================================================================~%~%~%~%"))
+================================================================
+ AUTHOR: Stefan Devai
+ WEBSITE: https://stefandevai.me/
+ SOURCE: https://github.com/stefandevai/latex-builder
+================================================================~%~%~%~%"))
 
 (defun define-options ()
   "Define cli options."
@@ -69,12 +69,21 @@
            :short #\o
            :long "output"
            :arg-parser #'identity
-           :meta-var "FILE")))
+           :meta-var "FILE")
+    (:name :no-intro
+           :description "hide program logo when running application."
+           :long "no-intro")))
 
 (defun unknown-option (condition)
   "Inform unknown cli option."
   (format t "> WARNING: ~s option is unknown!~%" (opts:option condition))
   (invoke-restart 'opts:skip-option))
+
+(defmacro when-option ((options opt) &body body)
+  "When an option `opt' exists in the cli command."
+  `(let ((it (getf ,options ,opt)))
+     (when it
+       ,@body)))
 
 (defun main ()
   (setf *debugger-hook*
@@ -88,7 +97,7 @@
 
   (define-options)
 
-  (let ((output-path "./article.tex")
+  (let ((output-path *default-output-path*)
         (layout-path nil))
     (multiple-value-bind (options free-args)
         (handler-case
@@ -114,9 +123,12 @@
             ((null (car free-args))
              (format t "> FATAL: an input markdown file is required.~%"))
             (t (progn
-                 (when (getf options :output)
-                   (setf output-path (getf options :output)))
-                 (when (getf options :layout)
-                   (setf layout-path (getf options :layout)))
-                 (print-intro)
+                 (when-option (options :no-intro)
+                   (setf *show-ascii-intro* nil))
+                 (when-option (options :output)
+                   (setf output-path it))
+                 (when-option (options :layout)
+                   (setf layout-path it))
+
+                 (when *show-ascii-intro* (print-intro))
                  (create (first free-args) output-path :layout layout-path)))))))

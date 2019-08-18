@@ -4,6 +4,15 @@
 
 (in-package #:latex-builder)
 
+(defparameter *bibliography-in-newpage* t
+  "If set to true, bibliography will always be rendered in a new page after the body,")
+
+(defparameter *show-ascii-intro* t
+  "If set to true, show program logo when running on cli.")
+
+(defvar *default-output-path* "./article.tex"
+  "Default latex file output path.")
+
 (defvar *citation-style* :apa
   "Global style for citations in biliography.")
 

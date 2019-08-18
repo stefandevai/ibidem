@@ -208,7 +208,7 @@
   "Return a formatted latex bibliography.
   `object' is a `markdown-object' that contains information about the citations and sources."
   (str:concat
-   "\\newpage~%~%"
+   (when *bibliography-in-newpage* "\\newpage~%~%")
    (thebibliography
      (str:concat
       "\\raggedright~%"

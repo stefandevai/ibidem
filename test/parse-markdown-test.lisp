@@ -63,3 +63,23 @@
       (ok (equal "Ninel" (author object)))
       (ok (equal nil (date object)))
       (ok (equal "Finland" (location object))))))
+
+(deftest markdown-body-parsing
+  (testing "markdown line types"
+    (ok (equal ':paragraph (body-line-type "  abcdef")))
+    (ok (equal ':paragraph (body-line-type "abcdef")))
+    (ok (equal ':subsubsection (body-line-type "############# aaa")))
+    (ng (equal ':subsubsection (body-line-type "#############aaa")))
+    (ok (equal ':subsubsection (body-line-type "### aaa")))
+    (ng (equal ':subsubsection (body-line-type "###aaa")))
+    (ok (equal ':subsection (body-line-type "## aaa")))
+    (ng (equal ':subsection (body-line-type "##aaa")))
+    (ok (equal ':section (body-line-type "# aaa")))
+    (ng (equal ':section (body-line-type "#aaa")))
+    (ok (equal ':maths (body-line-type "$e^2$")))
+    (ng (equal ':list-item (body-line-type "-aaa")))
+    (ok (equal ':list-item (body-line-type "- aaa")))
+    (ok (equal ':quote (body-line-type ">aaa")))
+    (ok (equal ':quote (body-line-type "   >aaa")))
+    (ok (equal ':quote (body-line-type "   > aaa")))
+    (ok (equal ':quote (body-line-type "> aaa")))))

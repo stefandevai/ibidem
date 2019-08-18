@@ -185,10 +185,10 @@
 
 (defun body-line-type (str)
   "Defines a type for a markdown line. If it starts by:
-  ####, it is a subsubsection;
-  ###, it is a subsection;
-  ##, it is a section;
-  # , it is a heading;
+  #### ... # , it is a subsubsection;
+  ### , it is a subsubsection;
+  ## , it is a subsection;
+  # , it is a section;
   $, it is a math formulation;
   - , it a list item;
   > , it a quote;
@@ -196,22 +196,29 @@
   (if (>= (length (str:trim str)) 2)
       (let* ((trimmed-str (str:trim str))
              (begin-str (str:substring 0 2 trimmed-str)))
-        (cond ((and (>= (length trimmed-str) 3)
-                   (equal (str:substring 0 3 trimmed-str) "###"))
-               ':subsubsection)
-              ((equal begin-str "##")
-               ':subsection)
-              ((equal begin-str "# ")
-               ':section)
+        (cond ((char= (char trimmed-str 0) #\#)
+               (parse-section-type trimmed-str))
               ((char= (char begin-str 0) #\$)
                ':maths)
-              ((and (char= (char begin-str 0) #\-)
-                  (char= (char begin-str 1) #\Space))
+              ((str:starts-with? "- " trimmed-str)
                ':list-item)
-              ((char= (char trimmed-str 0) #\>)
+              ((equal (char trimmed-str 0) #\>)
                ':quote)
               (t ':paragraph)))
       ':paragraph))
+
+(defun parse-section-type (string)
+  (let* ((space-pos (position #\Space string))
+         (hashtags (count #\# (str:substring 0 space-pos string))))
+    (cond ((null space-pos)
+           ':paragraph)
+          ((char= #\# (char string (1- space-pos)))
+           (case hashtags
+             (1 ':section)
+             (2 ':subsection)
+             (otherwise ':subsubsection)))
+          (t :paragraph))))
+
 
 
 ;;; -------------------------------------------------------------------------------------------- ;;;

@@ -155,33 +155,38 @@
 
 (defun parse-body-lines (string)
   "Loop through lines in `string' and return a tree of markdown elements."
-  (remove nil
-          (let* ((lines (str:lines string))
-                 (types (mapcar #'body-line-type lines))
-                 (llength (length lines)))
+  (remove
+   nil
+   (let* ((lines (str:lines string))
+          (types (mapcar #'body-line-type lines))
+          (llength (length lines)))
 
-            (loop :with content := nil
-               :for index :from 0 :below llength
+     (loop :with content := nil
+        :for index :from 0 :below llength
+;        :do (format t "~A~%" lines)
+ ;       :do (format t "~D~%" index)
 
-               :if (equal :list-item (elt types index))
-               :do (let ((md-list (list :line-type :list
-                                        :content (loop :for i :from index :below llength
-                                                    :until (not (equal ':list-item (elt types i)))
-                                                    :collecting (elt lines i)))))
-                     (setq content md-list)
-                     (setq index (+ index (length md-list))))
+        :if (equal :list-item (elt types index))
+        :do (let ((md-list
+                   (list :line-type :list
+                         :content (loop :for i :from index :below (1- llength)
+;                                       :do (print i)
+                                     :until (not (equal ':list-item (elt types i)))
+                                     :collecting (elt lines i)))))
 
-               :else :do (if (str:empty? (elt lines index))
-                             (setq content nil)
-                             (setq content (list :line-type (elt types index)
-                                                 :content (elt lines index))))
-               :collect content))))
+              (setq content md-list)
+              (setq index (+ index (1- (length (getf md-list :content))))))
+
+        :else :do (if (str:empty? (elt lines index))
+                      (setq content nil)
+                      (setq content (list :line-type (elt types index)
+                                          :content (elt lines index))))
+        :collect content))))
 
 (defun parse-body-line (str)
   "Parse a single line in markdown's body."
-  (if (not (str:empty? (str:trim str)))
-      (list :line-type (body-line-type str) :content str)
-      nil))
+  (when (and  str (not (str:empty? (str:trim str))))
+      (list :line-type (body-line-type str) :content str)))
 
 (defun body-line-type (str)
   "Defines a type for a markdown line. If it starts by:
@@ -197,7 +202,7 @@
       (let* ((trimmed-str (str:trim str))
              (begin-str (str:substring 0 2 trimmed-str)))
         (cond ((char= (char trimmed-str 0) #\#)
-               (parse-section-type trimmed-str))
+               (parse-heading-type trimmed-str))
               ((char= (char begin-str 0) #\$)
                ':maths)
               ((str:starts-with? "- " trimmed-str)
@@ -207,7 +212,8 @@
               (t ':paragraph)))
       ':paragraph))
 
-(defun parse-section-type (string)
+(defun parse-heading-type (string)
+  "Parse markdown headings to latex sections."
   (let* ((space-pos (position #\Space string))
          (hashtags (count #\# (str:substring 0 space-pos string))))
     (cond ((null space-pos)
@@ -218,8 +224,6 @@
              (2 ':subsection)
              (otherwise ':subsubsection)))
           (t :paragraph))))
-
-
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Bibliography parsing                                                                         ;;;

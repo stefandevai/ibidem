@@ -65,7 +65,13 @@
       (ok (equal "Finland" (location object))))))
 
 (deftest markdown-body-parsing
-  (testing "markdown line types"
+  (testing "markdown line type"
+    (ok (null (parse-body-line "  ")))
+    (ok (null (parse-body-line nil)))
+    (ok (null (parse-body-line "")))
+    (ok (equal ':paragraph (body-line-type "-abcdef")))
+    (ok (equal ':paragraph (body-line-type "##abcdef")))
+    (ok (equal ':paragraph (body-line-type "#abcdef")))
     (ok (equal ':paragraph (body-line-type "  abcdef")))
     (ok (equal ':paragraph (body-line-type "abcdef")))
     (ok (equal ':subsubsection (body-line-type "############# aaa")))

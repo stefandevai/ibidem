@@ -18,6 +18,13 @@ build:
 	     --eval "(sb-ext:save-lisp-and-die \"$(BIN_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main :purify t :compression t)" \
 	     --end-toplevel-options "$@"
 
+.PHONY: debug
+debug:
+	sbcl --load latex-builder.asd \
+	     --eval "(ql:quickload :latex-builder)" \
+	     --eval "(sb-ext:save-lisp-and-die \"$(BIN_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main)" \
+	     --end-toplevel-options "$@"
+
 .PHONY: install
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/

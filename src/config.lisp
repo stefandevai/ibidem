@@ -37,6 +37,9 @@
         "\\end{document}")
   "Basic default layout in case the user hasn't provided one.")
 
+(defvar *group-markdown-types* '(:list)
+  "Markdown types that should be grouped together.")
+
 (defvar *delimiter-bibliography-start* "~~~bibliography"
   "Custom markdown delimiter for the start of bibliography's section.")
 
@@ -45,3 +48,5 @@
 
 (defvar *delimiter-default* "---"
   "Default markdown delimiter.")
+
+(setq cl-ppcre:*allow-quoting* t)

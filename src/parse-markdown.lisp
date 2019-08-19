@@ -163,25 +163,24 @@
 
      (loop :with content := nil
         :for index :from 0 :below llength
-;        :do (format t "~A~%" lines)
- ;       :do (format t "~D~%" index)
+        :do (setq content nil)
 
-        :if (equal :list-item (elt types index))
-        :do (let ((md-list
-                   (list :line-type :list
-                         :content (loop :for i :from index :below (1- llength)
-;                                       :do (print i)
-                                     :until (not (equal ':list-item (elt types i)))
-                                     :collecting (elt lines i)))))
+        :if (position (elt types index) *group-markdown-types*)
+        :do (progn (setq content (parse-body-group (elt types index)
+                                                   (subseq lines index nil)
+                                                   (subseq types index nil)))
+                   (setq index (+ index (1- (length (getf content :content))))))
 
-              (setq content md-list)
-              (setq index (+ index (1- (length (getf md-list :content))))))
-
-        :else :do (if (str:empty? (elt lines index))
-                      (setq content nil)
-                      (setq content (list :line-type (elt types index)
-                                          :content (elt lines index))))
+        :else :do (when (not (str:empty? (elt lines index)))
+                    (setq content (list :line-type (elt types index)
+                                        :content (elt lines index))))
         :collect content))))
+
+(defun parse-body-group (ltype lines ltypes)
+  (list :line-type ltype
+        :content (loop :for i :from 0 :below (length lines)
+                    :while (equal ltype (elt ltypes i))
+                    :collecting (elt lines i))))
 
 (defun parse-body-line (str)
   "Parse a single line in markdown's body."
@@ -206,7 +205,7 @@
               ((char= (char begin-str 0) #\$)
                ':maths)
               ((str:starts-with? "- " trimmed-str)
-               ':list-item)
+               ':list)
               ((equal (char trimmed-str 0) #\>)
                ':quote)
               (t ':paragraph)))
@@ -230,7 +229,7 @@
 ;;; -------------------------------------------------------------------------------------------- ;;;
 
 (defun parse-bibliography (string object)
-  "Parse content within markdown's bibliography."
+  "Parse content within markdown's bibliography and stores it in markdown-object `object'."
   (let ((biblio-string (string-between *delimiter-bibliography-start* *delimiter-bibliography-end* string)))
     (when biblio-string
       (do-occurrences-between source-string
@@ -254,23 +253,23 @@
 
 (defun parse-citations (string object)
   "Parses each citation contained in `string' and push them to `citations' in `object'."
-  (let ((cl-ppcre:*allow-quoting* t)
-        (counter 1))
-    (do-occurrences-between citation-string
-      "c["
-      "]"
-      string
-      (let ((citation (parse-citation citation-string counter)))
-        (pushnew citation (citations object))
+  (when object
+    (let* ((counter 1))
+      (do-occurrences-between citation-string
+          " c["
+          "]"
+          string
+        (let ((citation (parse-citation citation-string counter)))
+          (pushnew citation (citations object))
 
-        ;; TODO: Create a function that modifies the value of string
-        ;; instead of making a new copy each funcall.
-        ;; Use nsubstitute http://clhs.lisp.se/Body/f_sbs_s.htm
-        (setf string (substitute-citation string citation-string citation)))
-      (incf counter))
+          ;; TODO: Create a function that modifies the value of string
+          ;; instead of making a new copy each funcall.
+          ;; Use nsubstitute http://clhs.lisp.se/Body/f_sbs_s.htm
+          (setf string (substitute-citation string citation-string citation)))
+        (incf counter))
 
-    (setf (citations object) (reverse (citations object)))
-    (return-from parse-citations string)))
+      (setf (citations object) (reverse (citations object)))
+      (return-from parse-citations string))))
 
 (defun parse-citation (citation-string &optional counter)
   "Parse an `id'and `pages' in citation-string separated by an ':' and
@@ -287,6 +286,6 @@
 (defun substitute-citation (string citation-string citation)
   "Return a string with the original citation-string substituted with a
   LaTeX citation."
-  (ppcre:regex-replace (concatenate 'string "\\Qc[" citation-string "]")
+  (ppcre:regex-replace (str:concat "\\Q\ c[" citation-string "]")
                        string
-                       (latex-element "cite" nil (car citation))))
+                       (str:concat " " (latex-element "cite" nil (car citation)))))

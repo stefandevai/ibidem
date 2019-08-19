@@ -37,7 +37,7 @@
         "\\end{document}")
   "Basic default layout in case the user hasn't provided one.")
 
-(defvar *group-markdown-types* '(:list)
+(defvar *group-markdown-types* '(:list :quote)
   "Markdown types that should be grouped together.")
 
 (defvar *delimiter-bibliography-start* "~~~bibliography"

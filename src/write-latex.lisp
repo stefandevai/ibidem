@@ -80,19 +80,48 @@
         (:quote (make-latex-quote (getf line :content)))))))
    "~%~%"))
 
-(defun make-latex-quote (string)
+;; (defun make-latex-quote (string)
+;;   "Return a formatted string as latex quote."
+;;   (begin-end "quote"
+;;     (textit
+;;       (str:concat
+;;        (str:substring
+;;         (position-if-not
+;;          #'(lambda (c) (char= c #\Space))
+;;          (str:trim-left string)
+;;          :start 1)
+;;         nil
+;;         string)
+;;        "~%"))))
+
+(defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
   (begin-end "quote"
     (textit
-      (str:concat
-       (str:substring
-        (position-if-not
-         #'(lambda (c) (char= c #\Space))
-         (str:trim-left string)
-         :start 1)
-        nil
-        string)
-       "~%"))))
+      (reduce
+       #'str:concat
+       (mapcar
+        (lambda (line)
+          (str:concat
+           (str:substring
+            (position-if-not
+             #'(lambda (c) (char= c #\Space))
+             (str:trim-left line)
+             :start 1)
+            nil
+            line) "~%")) lines)))))
+
+;; (defun make-latex-quote (items)
+;;   "Return a formatted string as a latex list of `items'."
+;;   (begin-end "quote"
+;;     (reduce
+;;      #'str:concat
+;;      (mapcar
+;;       #'(lambda (line)
+;;           (str:concat "\\item "
+;;                       (str:substring 1 nil (str:trim-left line))
+;;                       "~%"))
+;;       items))))
 
 (defun make-latex-list (items)
   "Return a formatted string as a latex list of `items'."

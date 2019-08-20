@@ -5,7 +5,7 @@ endif
 BIN_PATH = ./bin
 EXECUTABLE_NAME = latex-builder
 
-MD_FILE_PATH = $(BIN_PATH)/article.md
+MD_FILE_PATH = $(BIN_PATH)/huelga_general.md
 LATEX_FILE_PATH = $(BIN_PATH)/article.tex
 LATEX_OUTPUT_DIR = $(BIN_PATH)/output
 
@@ -44,6 +44,6 @@ test:
 
 .PHONY: run
 run:
-	$(BIN_PATH)/$(EXECUTABLE_NAME) $(MD_FILE_PATH) -o $(LATEX_FILE_PATH)
+	$(BIN_PATH)/$(EXECUTABLE_NAME) $(MD_FILE_PATH) -o $(LATEX_FILE_PATH) -l asset/layout.tex
 	pdflatex -output-directory $(LATEX_OUTPUT_DIR) $(LATEX_FILE_PATH)
 	cp $(LATEX_OUTPUT_DIR)/article.pdf $(BIN_PATH)

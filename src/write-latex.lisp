@@ -51,7 +51,6 @@
                 (if (date object) (make-latex-header-item (date object))))
               "~%~%"))
 
-
 (defun make-latex-header-item (item)
   "Receive a single header item and return a formatted latex string."
   (str:concat (bold item) "~%"  *linebreak*))
@@ -80,20 +79,6 @@
         (:quote (make-latex-quote (getf line :content)))))))
    "~%~%"))
 
-;; (defun make-latex-quote (string)
-;;   "Return a formatted string as latex quote."
-;;   (begin-end "quote"
-;;     (textit
-;;       (str:concat
-;;        (str:substring
-;;         (position-if-not
-;;          #'(lambda (c) (char= c #\Space))
-;;          (str:trim-left string)
-;;          :start 1)
-;;         nil
-;;         string)
-;;        "~%"))))
-
 (defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
   (begin-end "quote"
@@ -110,18 +95,6 @@
              :start 1)
             nil
             line) "~%")) lines)))))
-
-;; (defun make-latex-quote (items)
-;;   "Return a formatted string as a latex list of `items'."
-;;   (begin-end "quote"
-;;     (reduce
-;;      #'str:concat
-;;      (mapcar
-;;       #'(lambda (line)
-;;           (str:concat "\\item "
-;;                       (str:substring 1 nil (str:trim-left line))
-;;                       "~%"))
-;;       items))))
 
 (defun make-latex-list (items)
   "Return a formatted string as a latex list of `items'."
@@ -226,7 +199,7 @@
       (str:concat "pp. " pages ". ")
       (str:concat "p. " pages ". " )))
 
-(defun make-latex-bibliography-item (citation index object)
+(defun make-latex-bibliography-item (citation object)
   "Return a formatted latex bibliography item."
     (str:concat (bibitem (car citation))
                 (make-citation citation (bibliography object))
@@ -244,5 +217,4 @@
       (reduce #'str:concat
               (let ((citations (citations object)))
                 (loop :for citation :in citations
-                   :for index :from 1 :to (length citations)
-                   :collect (make-latex-bibliography-item citation index object))))))))
+                   :collect (make-latex-bibliography-item citation object))))))))

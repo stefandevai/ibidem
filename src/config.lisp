@@ -37,6 +37,9 @@
         "\\end{document}")
   "Basic default layout in case the user hasn't provided one.")
 
+(defvar *latex-chars-to-escape* '(#\%)
+  "List of characters to escape when writing LaTeX file.")
+
 (defvar *group-markdown-types* '(:list :quote)
   "Markdown types that should be grouped together.")
 

@@ -73,9 +73,8 @@
       (ecase (getf line :line-type)
         (:paragraph (getf line :content))
         (:list (make-latex-list (getf line :content)))
-        (:section (make-latex-heading (getf line :content) 1))
-        (:subsection (make-latex-heading (getf line :content) 2))
-        (:subsubsection (make-latex-heading (getf line :content) 3))
+        ((or :section :subsection :subsubsection)
+         (make-latex-heading (getf line :content)))
         (:quote (make-latex-quote (getf line :content)))))))
    "~%~%"))
 
@@ -103,28 +102,30 @@
      #'str:concat
      (mapcar
       #'(lambda (line)
-          (str:concat "\\item "
+          (str:concat "\\item"
                       (str:substring 1 nil (str:trim-left line))
                       "~%"))
       items))))
 
-(defun make-latex-heading (string section-depth)
-  "Return a formatted string as a latex paragraph."
-  (let* ((section-str (case section-depth
+(defun make-latex-heading (string)
+  "Return a formatted string as a latex section, subsection or subsubsection."
+  (let* ((trimmed-heading (str:trim-left string))
+         (space-index (position #\Space trimmed-heading))
+         (section-str (case space-index
                        (1 "section*")
                        (2 "subsection*")
-                       (otherwise "subsubsection*")))
-        (trimmed-heading (str:trim-left string))
-        (space-index (if (> section-depth 2)
-                         (position #\Space trimmed-heading)
-                         section-depth)))
+                       (otherwise "subsubsection*"))))
 
     (latex-element section-str nil
       (str:trim-left (str:substring space-index nil trimmed-heading)))))
 
 (defun latex-escape (text)
   "Return `text' with escaped LaTeX special characters."
-  (ppcre:regex-replace-all "(?<!~)([%])" text "\\\\\\1"))
+  (ppcre:regex-replace-all (str:concat "(?<!~)(["
+                                       (coerce *latex-chars-to-escape* 'string)
+                                       "])")
+                           text
+                           "\\\\\\1"))
 
 (defun make-latex-bold (text)
   "Return `text' with all instances of markdown bold as latex bold.

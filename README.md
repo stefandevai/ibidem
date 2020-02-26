@@ -126,7 +126,7 @@ Each block piece is described in isolation here:
 ### Citation
 
 Within the text, you can have citations in the following format:
-`[source-unique-id:pages]`
+`c[source-unique-id:pages]`
 
 E.g.
-`[jacoby:334-336]`
+`c[jacoby:334-336]`

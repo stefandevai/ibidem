@@ -16,4 +16,4 @@
 *.sx32fsl
 *.wx64fsl
 *.wx33fsl
-bin/
+build/

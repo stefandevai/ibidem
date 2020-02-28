@@ -83,6 +83,7 @@
 
 (defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
+  (format t "here~%")
   (begin-end "quote"
 	     (textit
 	      (reduce

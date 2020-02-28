@@ -17,3 +17,4 @@
 *.wx64fsl
 *.wx33fsl
 build/
+*#

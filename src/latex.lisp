@@ -58,14 +58,14 @@
   "Creates a caption string with `\caption{}' directive in Latex."
   `(latex-element "caption" t ,@body))
 
-(defmacro image (url &body body)
+(defmacro image (aurl &body body)
   "Creates a figure with `\begin{figure}[h]' and `\end{figure}'."
   `(surround-string (latex-element "begin" nil "figure")
                     (latex-element "end" t "figure")
 		    (str:concat "[h]~%"
 				*centering*
-				(includegraphics ,url)
-				(if (not (str:blankp (apply #'str:concat ,@body)))
+				(includegraphics ,aurl)
+				(if (not (str:blankp (str:concat ,@body)))
 				    (caption ,@body)
 				  nil))))
 

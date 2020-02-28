@@ -7,6 +7,9 @@
 (defvar *linebreak* "\\linebreak~%"
   "Default linebreak sintax in Latex")
 
+(defvar *centering* "\\centering~%"
+  "Default centering sintax in Latex")
+
 (defmacro surround-string (str1 str2 &body body)
   "Surround strings from `body' with `str1' and `str2'."
   `(str:concat ,str1 ,@body ,str2))
@@ -44,8 +47,29 @@
   `(latex-element "href" nil (str:concat ,url "}{" ,@body)))
 
 (defmacro url (&body body)
-  "Emphasizes strings with `\url{}' directive in Latex."
+  "Creates a url string with `\url{}' directive in Latex."
   `(latex-element "url" nil ,@body))
+
+(defmacro includegraphics (&body body)
+  "Creates a graphics to the url in body with `\includegraphics{}' directive in Latex."
+  `(latex-element "includegraphics" t ,@body))
+
+(defmacro caption (&body body)
+  "Creates a caption string with `\caption{}' directive in Latex."
+  `(latex-element "caption" t ,@body))
+
+(defmacro image (url &body body)
+  "Creates a figure with `\begin{figure}[h]' and `\end{figure}'."
+  `(surround-string (latex-element "begin" nil "figure")
+                    (latex-element "end" t "figure")
+		    (str:concat "[h]~%"
+				*centering*
+				(includegraphics ,url)
+				(if (not (str:blankp (apply #'str:concat ,@body)))
+				    (caption ,@body)
+				  nil))))
+
+(macroexpand '(loop for i upto 10 collect i))
 
 (defmacro noindent (&body body)
   "Surround strings with `\noindent{}' directive in Latex."

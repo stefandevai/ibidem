@@ -71,13 +71,14 @@
     (make-latex-bold
      (make-latex-url
       (make-latex-href
-       (latex-escape
-	(ecase (getf line :line-type)
-	  (:paragraph (getf line :content))
-	  (:list (make-latex-list (getf line :content)))
-	  ((or :section :subsection :subsubsection)
-	   (make-latex-heading (getf line :content)))
-	  (:quote (make-latex-quote (getf line :content)))))))))
+       (make-latex-image
+	(latex-escape
+	 (ecase (getf line :line-type)
+	   (:paragraph (getf line :content))
+	   (:list (make-latex-list (getf line :content)))
+	   ((or :section :subsection :subsubsection)
+	    (make-latex-heading (getf line :content)))
+	   (:quote (make-latex-quote (getf line :content))))))))))
    "~%~%"))
 
 (defun make-latex-quote (lines)
@@ -150,7 +151,7 @@
   Example:
   (make-latex-link \"Click [here](https://test.com/).\")
   ;; => \"Click \\href{https://test.com/}{here}.\""
-  (ppcre:regex-replace-all "\\[(.*?\\S)\\]\\((.*?\\S)?\\)" text (href "\\2" "\\1")))
+  (ppcre:regex-replace-all "[\\s]\\[(.*?\\S)\\]\\((.*?\\S)?\\)" text (href "\\2" "\\1")))
 
 (defun make-latex-url (text)
   "Return `text' with all instances of markdown link as a latex url.
@@ -158,6 +159,21 @@
   (make-latex-url \"A url: https://test.com/. Another one: <http://as.com/>.\")
   ;; => \"A url: \\url{https://test.com/}. Another one: \\url{http://as.com/}.\""
   (ppcre:regex-replace-all "<((?:http).\\S+\\..\\S+)>" text (url "\\1")))
+
+(defun make-latex-image (text)
+  "Return `text' with all instances of markdown link as a latex url.
+  Example:
+  (make-latex-url \"A url: https://test.com/. Another one: <http://as.com/>.\")
+  ;; => \"A url: \\url{https://test.com/}. Another one: \\url{http://as.com/}.\""
+  (let ((result text))
+    (ppcre:do-register-groups
+     (cap link)
+     ("!\\[([^\\]]+|.*)\\]\\((\\S+)\\)" text)
+     (setq result
+	   (str:replace-all (str:concat "![" cap "](" link ")")
+			    (image link cap)
+			    result)))
+    result))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Bibliography writing                                                                         ;;;

@@ -69,14 +69,15 @@
   (str::concat
    (make-latex-emphasis
     (make-latex-bold
-     (make-latex-href
-      (latex-escape
-       (ecase (getf line :line-type)
-	 (:paragraph (getf line :content))
-	 (:list (make-latex-list (getf line :content)))
-	 ((or :section :subsection :subsubsection)
-	  (make-latex-heading (getf line :content)))
-	 (:quote (make-latex-quote (getf line :content))))))))
+     (make-latex-url
+      (make-latex-href
+       (latex-escape
+	(ecase (getf line :line-type)
+	  (:paragraph (getf line :content))
+	  (:list (make-latex-list (getf line :content)))
+	  ((or :section :subsection :subsubsection)
+	   (make-latex-heading (getf line :content)))
+	  (:quote (make-latex-quote (getf line :content)))))))))
    "~%~%"))
 
 (defun make-latex-quote (lines)

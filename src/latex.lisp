@@ -39,6 +39,10 @@
   "Emphasizes strings with `\emph{}' directive in Latex."
   `(latex-element "emph" nil ,@body))
 
+(defmacro href (url &body body)
+  "Creates a link to `url' with `body' as text using `\href{}{}'"
+  `(latex-element "href" nil (str:concat ,url "}{" ,@body)))
+
 (defmacro url (&body body)
   "Emphasizes strings with `\url{}' directive in Latex."
   `(latex-element "url" nil ,@body))

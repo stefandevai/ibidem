@@ -69,37 +69,38 @@
   (str::concat
    (make-latex-emphasis
     (make-latex-bold
-     (latex-escape
-      (ecase (getf line :line-type)
-        (:paragraph (getf line :content))
-        (:list (make-latex-list (getf line :content)))
-        ((or :section :subsection :subsubsection)
-         (make-latex-heading (getf line :content)))
-        (:quote (make-latex-quote (getf line :content)))))))
+     (make-latex-href
+      (latex-escape
+       (ecase (getf line :line-type)
+	 (:paragraph (getf line :content))
+	 (:list (make-latex-list (getf line :content)))
+	 ((or :section :subsection :subsubsection)
+	  (make-latex-heading (getf line :content)))
+	 (:quote (make-latex-quote (getf line :content))))))))
    "~%~%"))
 
 (defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
   (begin-end "quote"
-    (textit
-      (reduce
-       #'str:concat
-       (mapcar
-        (lambda (line)
-          (str:concat
-           (str:substring
-            (position-if-not
-             #'(lambda (c) (char= c #\Space))
-             (str:trim-left line)
-             :start 1)
-            nil
-            line) "~%")) lines)))))
+	     (textit
+	      (reduce
+	       #'str:concat
+	       (mapcar
+		(lambda (line)
+		  (str:concat
+		   (str:substring
+		    (position-if-not
+		     #'(lambda (c) (char= c #\Space))
+		     (str:trim-left line)
+		     :start 1)
+		    nil
+		    line) "~%")) lines)))))
 
 (defun make-latex-list (items)
   "Return a formatted string as a latex list of `items'."
   (begin-end "itemize"
-    (reduce
-     #'str:concat
+	     (reduce
+	      #'str:concat
      (mapcar
       #'(lambda (line)
           (str:concat "\\item"
@@ -142,6 +143,20 @@
   (make-latex-emphasis \"aaa **aaa**  aaa\")
   ;; => \"aaa \\emph{aaa} aaa\""
   (ppcre:regex-replace-all "\\*([^\\*]\\S(.*?\\S)?)\\*" text (emph "\\1")))
+
+(defun make-latex-href (text)
+  "Return `text' with all instances of markdown link as a latex link.
+  Example:
+  (make-latex-link \"Click [here](https://test.com/).\")
+  ;; => \"Click \\href{https://test.com/}{here}.\""
+  (ppcre:regex-replace-all "\\[(.*?\\S)\\]\\((.*?\\S)?\\)" text (href "\\2" "\\1")))
+
+(defun make-latex-url (text)
+  "Return `text' with all instances of markdown link as a latex url.
+  Example:
+  (make-latex-url \"A url: https://test.com/. Another one: <http://as.com/>.\")
+  ;; => \"A url: \\url{https://test.com/}. Another one: \\url{http://as.com/}.\""
+  (ppcre:regex-replace-all "<((?:http).\\S+\\..\\S+)>" text (url "\\1")))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Bibliography writing                                                                         ;;;

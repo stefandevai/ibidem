@@ -59,17 +59,15 @@
   `(latex-element "caption" t ,@body))
 
 (defmacro image (aurl &body body)
-  "Creates a figure with `\begin{figure}[h]' and `\end{figure}'."
+  "Creates a figure with `\begin{figure}[H]' and `\end{figure}'."
   `(surround-string (latex-element "begin" nil "figure")
                     (latex-element "end" t "figure")
-		    (str:concat "[h]~%"
+		    (str:concat "[H]~%"
 				*centering*
 				(includegraphics ,aurl)
 				(if (not (str:blankp (str:concat ,@body)))
 				    (caption ,@body)
 				  nil))))
-
-(macroexpand '(loop for i upto 10 collect i))
 
 (defmacro noindent (&body body)
   "Surround strings with `\noindent{}' directive in Latex."

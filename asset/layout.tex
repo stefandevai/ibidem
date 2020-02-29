@@ -10,11 +10,17 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage[all]{nowidow} 
 \usepackage{graphicx} 
+\usepackage{float} 
+
+\usepackage{caption}
+\DeclareCaptionFont{mdcapl}{\fontsize{10}{13}\mdseries\bfseries}
+\DeclareCaptionFont{mdcapt}{\fontsize{10}{13}\mdseries\itshape}
+\usepackage[labelfont=mdcapl,textfont=mdcapt]{caption}
 
 \setlist[itemize]{label=\textbullet}
 \geometry{a4paper, margin=1in}
 \setlength{\parskip}{1em}
-\linespread{1.25}
+\linespread{1}
 
 \renewcommand{\tiny}{\normalsize}
 \renewcommand{\footnotesize}{\normalsize}

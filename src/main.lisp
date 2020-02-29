@@ -92,7 +92,7 @@
                   "> CAUGHT ERROR: ~a~%"
                   condition)
           (finish-output *error-output*)
-          ))
+          (sb-ext:quit)))
 
   (define-options)
 

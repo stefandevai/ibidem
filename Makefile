@@ -11,9 +11,14 @@ all: build
 build:
 	mkdir -p $(BUILD_PATH)
 	sbcl --load latex-builder.asd \
-	     --eval "(ql:quickload :latex-builder)" \
-	     --eval "(sb-ext:save-lisp-and-die \"$(BUILD_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main :purify t :compression t)" \
-	     --end-toplevel-options "$@"
+			 --eval "(asdf:operate :build-op :latex-builder)" \
+			 --eval "(quit)"
+
+#sbcl --load latex-builder.asd \
+#--eval "(ql:uninstall :str)" \
+#--eval "(ql:quickload :latex-builder)" \
+#--eval "(sb-ext:save-lisp-and-die \"$(BUILD_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main :purify t :compression t)" \
+#--end-toplevel-options "$@"
 
 .PHONY: debug
 debug:

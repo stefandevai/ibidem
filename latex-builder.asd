@@ -7,6 +7,9 @@
   :author "Stefan Devai <stedevai@gmail.com>"
   :license  "MIT"
   :version "0.0.3"
+  :build-operation "program-op"
+  :build-pathname "./build/latex-builder"
+  :entry-point "latex-builder:main"
   :serial t
   :depends-on (#:str #:cl-ppcre #:unix-opts)
   :components ((:module "src"

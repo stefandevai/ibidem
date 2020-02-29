@@ -2,8 +2,6 @@
 
 Latex formatting automation.
 
-**NOTE: the application is in its early development stage.**
-
 ## What is it about?
 
 The purpose of this utility is to automate the formatting of academic articles or essays:
@@ -13,7 +11,7 @@ The purpose of this utility is to automate the formatting of academic articles o
 
 ## Progress
 
-- [ ] Parse default markdown syntax
+- [x] Parse default markdown syntax
   - [x] Parse bold
   - [x] Parse italics
   - [x] Parse bold-italics
@@ -21,20 +19,24 @@ The purpose of this utility is to automate the formatting of academic articles o
   - [x] Parse lists
   - [x] Parse math formulas
   - [x] Parse quotes
-  - [ ] Parse links
-  - [ ] Parse images
+  - [x] Parse links
+  - [x] Parse images
  
 - [x] Parse custom markdown syntax
   - [x] Parse header
   - [x] Parse bibliography
   - [x] Parse citations in text
 
-- [ ] Write full LaTeX syntax
+- [ ] Write LaTeX syntax
   - [x] Main styles
   - [x] Custom layout
   - [x] Space between paragraphs
   - [x] Lists
   - [x] Quote styles
+  - [x] Images
+  - [x] URLs
+  - [x] Href
+  - [ ] BibTeX automatic creation
 
 ## How to use?
 

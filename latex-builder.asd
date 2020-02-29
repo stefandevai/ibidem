@@ -10,13 +10,12 @@
   :build-operation "program-op"
   :build-pathname "./build/latex-builder"
   :entry-point "latex-builder:main"
-  :serial t
   :depends-on (#:str #:cl-ppcre #:unix-opts)
   :components ((:module "src"
                 :components
-                ((:file "package")
+                 ((:file "package")
                  (:file "config")
-                 (:file "latex")
-                 (:file "parse-markdown")
-                 (:file "write-latex")
-                 (:file "main")))))
+                 (:file "latex" :depends-on ("config"))
+                 (:file "parse-markdown" :depends-on ("config"))
+                 (:file "write-latex" :depends-on ("latex"))
+                 (:file "main" :depends-on ("write-latex" "parse-markdown"))))))

@@ -1,7 +1,7 @@
 # IBIDEM
 [![Build Status](https://travis-ci.com/stefandevai/ibidem.svg?branch=master)](https://travis-ci.com/stefandevai/ibidem)
 
-Latex formatting automation.
+CLI tool that makes it easier to write academic papers with citations. It uses a markdown to LaTeX conversion.
 
 ## What is it about?
 

@@ -1,4 +1,5 @@
-# LATEX-BUILDER
+# IBIDEM
+[![Build Status](https://travis-ci.com/stefandevai/ibidem.svg?branch=master)](https://travis-ci.com/stefandevai/ibidem)
 
 Latex formatting automation.
 
@@ -8,35 +9,6 @@ The purpose of this utility is to automate the formatting of academic articles o
 
 - We write a file on a [superset](#superset-of-markdowns-syntax) of [markdown's syntax](https://daringfireball.net/projects/markdown/).
 - *latex-builder* converts it to a basic *LaTeX* file.
-
-## Progress
-
-- [x] Parse default markdown syntax
-  - [x] Parse bold
-  - [x] Parse italics
-  - [x] Parse bold-italics
-  - [x] Parse headers ("#","##", "###" and "####")
-  - [x] Parse lists
-  - [x] Parse math formulas
-  - [x] Parse quotes
-  - [x] Parse links
-  - [x] Parse images
- 
-- [x] Parse custom markdown syntax
-  - [x] Parse header
-  - [x] Parse bibliography
-  - [x] Parse citations in text
-
-- [ ] Write LaTeX syntax
-  - [x] Main styles
-  - [x] Custom layout
-  - [x] Space between paragraphs
-  - [x] Lists
-  - [x] Quote styles
-  - [x] Images
-  - [x] URLs
-  - [x] Href
-  - [ ] BibTeX automatic creation
 
 ## How to use?
 

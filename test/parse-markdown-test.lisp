@@ -2,7 +2,7 @@
 ;;;; parse-markdown-test.lisp                                                                   ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:latex-builder)
+(in-package #:ibidem)
 
 (deftest string-parsing
   (testing "occurences between delimiters"

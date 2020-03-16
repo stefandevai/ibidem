@@ -1,15 +1,15 @@
 ;;;; ========================================================================================== ;;;;
-;;;; latex-builder.asd                                                                          ;;;;
+;;;; ibidem.asd                                                                                 ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(asdf:defsystem #:latex-builder
+(asdf:defsystem #:ibidem
   :description "Converts a custom markdown syntax file to latex."
   :author "Stefan Devai <stedevai@gmail.com>"
   :license  "MIT"
   :version "0.0.3"
   :build-operation "program-op"
-  :build-pathname "./build/latex-builder"
-  :entry-point "latex-builder:main"
+  :build-pathname "./build/ibidem"
+  :entry-point "ibidem:main"
   :depends-on (#:str #:cl-ppcre #:unix-opts)
   :components ((:module "src"
                 :components

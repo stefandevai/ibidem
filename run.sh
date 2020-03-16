@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Utility script to speed up the process of converting from md to pdf using
-# latex-builder in the way
+# ibidem in the way
 
 # Name of the program executable
-EXECUTABLE_NAME=latex-builder
+EXECUTABLE_NAME=ibidem
 
 # Path where the executable was build
 BUILD_PATH="./build"

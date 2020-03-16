@@ -2,7 +2,7 @@
 ;;;; main.lisp                                                                                  ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:latex-builder)
+(in-package #:ibidem)
 
 (defun write-to-file (str file-path)
   "Receive a string and a filepath and writes the string to the file"
@@ -47,7 +47,7 @@
 ================================================================
  AUTHOR: Stefan Devai
  WEBSITE: https://stefandevai.me/
- SOURCE: https://github.com/stefandevai/latex-builder
+ SOURCE: https://github.com/stefandevai/ibidem
 ================================================================~%~%~%~%"))
 
 (defun define-options ()
@@ -116,8 +116,8 @@
 
       (cond ((getf options :help)
              (opts:describe
-              :prefix "latex-builder input_file.md -o output_file.tex"
-              :usage-of "latex-builder"
+              :prefix "ibidem input_file.md -o output_file.tex"
+              :usage-of "ibidem"
               :args "[INPUT_FILE]"))
             ((null (car free-args))
              (format t "> FATAL: an input markdown file is required.~%"))

@@ -2,7 +2,7 @@
 ;;;; write-latex-test.lisp                                                                      ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:latex-builder)
+(in-package #:ibidem)
 
 (deftest write-latex-header
   (testing "write single latex header item"

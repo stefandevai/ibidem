@@ -1,8 +1,8 @@
 ;;;; ========================================================================================== ;;;;
-;;;; latex-builder-test.asd                                                                     ;;;;
+;;;; ibidem-test.asd                                                                            ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(asdf:defsystem #:latex-builder-test
+(asdf:defsystem #:ibidem-test
   :description "Converts a custom markdown syntax file to latex."
   :author "Stefan Devai <stedevai@gmail.com>"
   :license  "MIT"

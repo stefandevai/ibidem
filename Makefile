@@ -3,7 +3,7 @@ ifeq ($(PREFIX),)
 endif
 
 BUILD_PATH = ./build
-EXECUTABLE_NAME = latex-builder
+EXECUTABLE_NAME = ibidem
 CURRENT_DIR_STRING = $(CURDIR)/
 
 all: build
@@ -13,7 +13,7 @@ build:
 	mkdir -p $(BUILD_PATH)
 	sbcl --eval "(require \"asdf\")" \
 		   --eval "(push #p\"$(CURRENT_DIR_STRING)\" asdf:*central-registry*)" \
-	     --eval "(asdf:make :latex-builder)" \
+	     --eval "(asdf:make :ibidem)" \
 			 --eval "(quit)"
 
 .PHONY: release
@@ -21,14 +21,14 @@ release:
 	mkdir -p $(BUILD_PATH)
 	sbcl --eval "(require \"asdf\")" \
 		   --eval "(push #p\"$(CURRENT_DIR_STRING)\" asdf:*central-registry*)" \
-			 --eval "(asdf:load-system :latex-builder)" \
-			 --eval "(sb-ext:save-lisp-and-die \"$(BUILD_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'latex-builder:main :purify t :compression t)" \
+			 --eval "(asdf:load-system :ibidem)" \
+			 --eval "(sb-ext:save-lisp-and-die \"$(BUILD_PATH)/$(EXECUTABLE_NAME)\" :executable t :toplevel 'ibidem:main :purify t :compression t)" \
 			 --end-toplevel-options "$@"
 
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_PATH)
-	sbcl --eval "(asdf:clear-system :latex-builder)" \
+	sbcl --eval "(asdf:clear-system :ibidem)" \
 			 --eval "(quit)"
 
 .PHONY: install
@@ -44,6 +44,6 @@ uninstall:
 test:
 	sbcl --noinform \
 		   --disable-debugger \
-	     --load latex-builder-test.asd \
-		   --eval "(ql:quickload :latex-builder-test)" \
-			 --eval "(progn (rove:run :latex-builder-test) (sb-ext:quit))" \
+	     --load ibidem-test.asd \
+		   --eval "(ql:quickload :ibidem-test)" \
+			 --eval "(progn (rove:run :ibidem-test) (sb-ext:quit))" \

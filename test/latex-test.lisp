@@ -2,7 +2,7 @@
 ;;;; latex-test.lisp                                                                            ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:latex-builder)
+(in-package #:ibidem)
 
 (deftest latex-creation-test
   (testing "general macros"

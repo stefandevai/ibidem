@@ -2,7 +2,7 @@
 ;;;; config.lisp                                                                                ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(in-package #:latex-builder)
+(in-package #:ibidem)
 
 (defparameter *bibliography-in-newpage* t
   "If set to true, bibliography will always be rendered in a new page after the body,")

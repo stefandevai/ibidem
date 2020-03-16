@@ -2,7 +2,7 @@
 ;;;; package.lisp                                                                               ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(defpackage #:latex-builder
+(defpackage #:ibidem
   (:use #:cl)
   (:export #:create
            #:main))

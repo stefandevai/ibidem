@@ -2,5 +2,5 @@
 ;;;; package-test.lisp                                                                          ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(defpackage #:latex-builder
+(defpackage #:ibidem
   (:use #:cl #:rove))

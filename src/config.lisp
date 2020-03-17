@@ -32,8 +32,8 @@
              :web '(author)))
   "Order and style rules to generate citation formats.")
 
-(defvar *latex-default-layout*
-  (list "\\documentclass{article}~%\\usepackage{hyperref}~%~%\\begin{document}~%~%"
+(defparameter *latex-default-layout*
+  (list "\\documentclass{article}~%\\usepackage{hyperref}~%\\usepackage[T1]{fontenc}~%~%\\begin{document}~%~%"
         "\\end{document}")
   "Basic default layout in case the user hasn't provided one.")
 

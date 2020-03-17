@@ -3,10 +3,10 @@
 ;;;; ========================================================================================== ;;;;
 
 (asdf:defsystem "ibidem-test"
-  :description "Converts a custom markdown syntax file to latex."
+  :description "CLI tool that makes it easier to write academic papers with citations."
   :author "Stefan Devai <stedevai@gmail.com>"
   :license  "MIT"
-  :version "0.0.3"
+  :version "0.5.0"
   :serial t
   :depends-on ("ibidem" "rove")
   :components ((:file "test/package-test")

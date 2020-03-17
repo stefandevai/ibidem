@@ -6,7 +6,7 @@
   :description "CLI tool that makes it easier to write academic papers with citations."
   :author "Stefan Devai <stedevai@gmail.com>"
   :license  "MIT"
-  :version "0.0.3"
+  :version "0.5.0"
   :build-operation "program-op"
   :build-pathname "./build/ibidem"
   :entry-point "ibidem:main"

@@ -72,23 +72,23 @@
      (make-latex-url
       (make-latex-href
        (make-latex-image
-	(latex-escape
-	 (ecase (getf line :line-type)
-	   (:paragraph (getf line :content))
-	   (:list (make-latex-list (getf line :content)))
-	   ((or :section :subsection :subsubsection)
-	    (make-latex-heading (getf line :content)))
-	   (:quote (make-latex-quote (getf line :content))))))))))
+		(latex-escape
+		 (ecase (getf line :line-type)
+		   (:paragraph (getf line :content))
+		   (:list (make-latex-list (getf line :content)))
+		   ((or :section :subsection :subsubsection)
+			(make-latex-heading (getf line :content)))
+		   (:quote (make-latex-quote (getf line :content))))))))))
    "~%~%"))
 
 (defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
   (format t "here~%")
   (begin-end "quote"
-	     (textit
-	      (reduce
-	       #'str:concat
-	       (mapcar
+	(textit
+	  (reduce
+	   #'str:concat
+	   (mapcar
 		(lambda (line)
 		  (str:concat
 		   (str:substring
@@ -102,8 +102,8 @@
 (defun make-latex-list (items)
   "Return a formatted string as a latex list of `items'."
   (begin-end "itemize"
-	     (reduce
-	      #'str:concat
+	(reduce
+	 #'str:concat
      (mapcar
       #'(lambda (line)
           (str:concat "\\item"
@@ -116,9 +116,9 @@
   (let* ((trimmed-heading (str:trim-left string))
          (space-index (position #\Space trimmed-heading))
          (section-str (case space-index
-                       (1 "section*")
-                       (2 "subsection*")
-                       (otherwise "subsubsection*"))))
+						(1 "section*")
+						(2 "subsection*")
+						(otherwise "subsubsection*"))))
 
     (latex-element section-str nil
       (str:trim-left (str:substring space-index nil trimmed-heading)))))
@@ -168,12 +168,12 @@
   ;; => \"A url: \\url{https://test.com/}. Another one: \\url{http://as.com/}.\""
   (let ((result text))
     (ppcre:do-register-groups
-     (cap link)
-     ("!\\[([^\\]]+|.*)\\]\\((\\S+)\\)" text)
-     (setq result
-	   (str:replace-all (str:concat "![" cap "](" link ")")
-			    (image link cap)
-			    result)))
+		(cap link)
+		("!\\[([^\\]]+|.*)\\]\\((\\S+)\\)" text)
+	  (setq result
+			(str:replace-all (str:concat "![" cap "](" link ")")
+							 (image link cap)
+							 result)))
     result))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
@@ -192,13 +192,13 @@
                                                    'ctype))))))
        (reduce #'str:concat
                (loop :for param :in ,params
-                  :collect (cond ((listp param)
-                                  (let ((param-value (slot-value ,source (cadr param))))
-                                    (when param-value
-                                      (str:concat (eval (list (car param) param-value))
-                                                  (reduce #'str:concat (cddr param))))))
-                                 (t (when (slot-value ,source param)
-                                      (str:concat (slot-value ,source param) ". ")))))))))
+					 :collect (cond ((listp param)
+									 (let ((param-value (slot-value ,source (cadr param))))
+									   (when param-value
+										 (str:concat (eval (list (car param) param-value))
+													 (reduce #'str:concat (cddr param))))))
+									(t (when (slot-value ,source param)
+										 (str:concat (slot-value ,source param) ". ")))))))))
 
 (defun author-surname-initials (string)
   "Return author' surname followed by the initials of the other names.
@@ -218,7 +218,7 @@
 (defun get-citation-source (citation-id sources)
   "Return a `citation-source' from `sources' list where its id is equal to `citation-id'."
   (let* ((citation-id (subseq citation-id 0 (search "-" citation-id))))
-        (find-if (lambda (x) (string= citation-id (id x))) sources)))
+	(find-if (lambda (x) (string= citation-id (id x))) sources)))
 
 (defun make-citation (citation sources)
   "Return a formatted latex citation.
@@ -235,20 +235,22 @@
 
 (defun make-latex-bibliography-item (citation object)
   "Return a formatted latex bibliography item."
-    (str:concat (bibitem (car citation))
-                (make-citation citation (bibliography object))
-                (when (> (length citation) 1) (make-citation-pages (cadr citation)))
-                "~%~%"))
+  (str:concat (bibitem (car citation))
+			  (make-citation citation (bibliography object))
+			  (when (> (length citation) 1) (make-citation-pages (cadr citation)))
+			  "~%~%"))
 
 (defun make-latex-bibliography (object)
   "Return a formatted latex bibliography.
   `object' is a `markdown-object' that contains information about the citations and sources."
-  (str:concat
-   (when *bibliography-in-newpage* "\\newpage~%~%")
-   (thebibliography
-     (str:concat
-      "\\raggedright~%"
-      (reduce #'str:concat
-              (let ((citations (citations object)))
-                (loop :for citation :in citations
-                   :collect (make-latex-bibliography-item citation object))))))))
+  (let ((citations (citations object)))
+	(when citations
+	  (str:concat
+	   (when *bibliography-in-newpage* "\\newpage~%~%")
+	   (thebibliography
+		 (str:concat
+		  "\\raggedright~%"
+		  (reduce #'str:concat
+				  (loop :for citation :in citations
+						:collect (make-latex-bibliography-item citation
+															   object)))))))))

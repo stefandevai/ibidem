@@ -65,3 +65,29 @@
                (make-latex-emphasis "*aaa*")))
     (ok (equal "aaa \\emph{aaa} aaa"
                (make-latex-emphasis "aaa *aaa* aaa")))))
+
+(deftest test-build-citation
+  (testing "get right apa style from string"
+	(ok (equal (getf *citation-formats* :apa)
+			   (get-citation-style "apa"))))
+
+  (testing "use apa style if input style is nil"
+	(ok (equal (getf *citation-formats* :apa)
+			   (get-citation-style nil))))
+
+  (testing "use apa style if input style is undefined"
+	(ok (equal (getf *citation-formats* :apa)
+			   (get-citation-style "undefined style")))))
+
+
+
+
+
+
+
+
+
+
+
+
+

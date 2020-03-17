@@ -185,20 +185,20 @@
   (let ((style-params (gensym))
         (params (gensym)))
     `(let* ((,style-params (get-citation-style ,citation-style))
-												(,params (getf ,style-params
-																											(read-from-string
-																												(str:concat ":"
-																																								(slot-value ,source
-																																																				'ctype))))))
+			(,params (getf ,style-params
+						   (read-from-string
+							(str:concat ":"
+										(slot-value ,source
+													'ctype))))))
        (reduce #'str:concat
                (loop :for param :in ,params
-																					:collect (cond ((listp param)
-																																					(let ((param-value (slot-value ,source (cadr param))))
-																																							(when param-value
-																																									(str:concat (eval (list (car param) param-value))
-																																																					(reduce #'str:concat (cddr param))))))
-																																				(t (when (slot-value ,source param)
-																																									(str:concat (slot-value ,source param) ". ")))))))))
+					 :collect (cond ((listp param)
+									 (let ((param-value (slot-value ,source (cadr param))))
+									   (when param-value
+										 (str:concat (eval (list (car param) param-value))
+													 (reduce #'str:concat (cddr param))))))
+									(t (when (slot-value ,source param)
+										 (str:concat (slot-value ,source param) ". ")))))))))
 
 (defun get-citation-style (string)
   "Return a built-in citation style or a customized one.

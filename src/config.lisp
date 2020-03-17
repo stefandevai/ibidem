@@ -13,26 +13,26 @@
 (defvar *default-output-path* "./article.tex"
   "Default latex file output path.")
 
-(defvar *citation-style* :apa
+(defvar *default-citation-format* :apa
   "Global style for citations in biliography.")
 
-(defvar *citation-format*
-  '(:apa (list
-          :article '((author-surname-initials author)
-                     (parenthesis year ". ")
-                     title
-                     (emph journal ", ")
-                     volume-issue)
-          :web '((author-surname-initials author)
-                 (parenthesis year ". ")
-                 (emph title ". ")
-                 (url web-link)))
+(defvar *citation-formats*
+  (list :apa (list
+			  :article '((author-surname-initials author)
+						 (parenthesis year ". ")
+						 title
+						 (emph journal ", ")
+						 volume-issue)
+			  :web '((author-surname-initials author)
+					 (parenthesis year ". ")
+					 (emph title ". ")
+					 (url web-link)))
 
-    :other '(:article '(author)
-             :web '(author)))
+		:other (list :article '(author)
+					 :web '(author)))
   "Order and style rules to generate citation formats.")
 
-(defparameter *latex-default-layout*
+(defvar *latex-default-layout*
   (list "\\documentclass{article}~%\\usepackage{hyperref}~%\\usepackage[T1]{fontenc}~%~%\\begin{document}~%~%"
         "\\end{document}")
   "Basic default layout in case the user hasn't provided one.")

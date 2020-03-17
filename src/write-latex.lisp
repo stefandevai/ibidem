@@ -180,25 +180,43 @@
 ;;; Bibliography writing                                                                         ;;;
 ;;; -------------------------------------------------------------------------------------------- ;;;
 
-(defmacro build-citation (source)
-  "Builds a single citation according to a format provided in `source'."
-  (let ((style-params (getf *citation-format*
-                            *citation-style*))
+(defmacro build-citation (source citation-style)
+  "Build a single citation according to a format provided in `source'."
+  (let ((style-params (gensym))
         (params (gensym)))
-    `(let ((,params (getf ,style-params
-                          (read-from-string
-                           (str:concat ":"
-                                       (slot-value ,source
-                                                   'ctype))))))
+    `(let* ((,style-params (get-citation-style ,citation-style))
+												(,params (getf ,style-params
+																											(read-from-string
+																												(str:concat ":"
+																																								(slot-value ,source
+																																																				'ctype))))))
        (reduce #'str:concat
                (loop :for param :in ,params
-					 :collect (cond ((listp param)
-									 (let ((param-value (slot-value ,source (cadr param))))
-									   (when param-value
-										 (str:concat (eval (list (car param) param-value))
-													 (reduce #'str:concat (cddr param))))))
-									(t (when (slot-value ,source param)
-										 (str:concat (slot-value ,source param) ". ")))))))))
+																					:collect (cond ((listp param)
+																																					(let ((param-value (slot-value ,source (cadr param))))
+																																							(when param-value
+																																									(str:concat (eval (list (car param) param-value))
+																																																					(reduce #'str:concat (cddr param))))))
+																																				(t (when (slot-value ,source param)
+																																									(str:concat (slot-value ,source param) ". ")))))))))
+
+(defun get-citation-style (string)
+  "Return a built-in citation style or a customized one.
+
+  Examples:
+  (citation-format \"APA\")
+  (citation-format \"[SURNAME name, « title », source, volume, publisher, year, pages.]\")"
+  (if (and (str:starts-with? "[" string) (str:ends-with? "]" string))
+						(build-citation-style string)
+						(let ((style (getf *citation-formats*
+																									(intern (string-upcase string) :keyword))))
+								(if style
+												style
+												(getf *citation-formats* *default-citation-format*)))))
+
+(defun build-citation-style (string)
+		"TODO: return a default citation style from a string"
+		(getf *citation-formats* *default-citation-format*))
 
 (defun author-surname-initials (string)
   "Return author' surname followed by the initials of the other names.
@@ -220,13 +238,13 @@
   (let* ((citation-id (subseq citation-id 0 (search "-" citation-id))))
 	(find-if (lambda (x) (string= citation-id (id x))) sources)))
 
-(defun make-citation (citation sources)
+(defun make-citation (citation sources citation-style)
   "Return a formatted latex citation.
   `string' cointains information about the citation as \"citation-id:pages\";
   `sources' contains a list of `citation-source'."
   (str:concat
    (build-citation
-    (get-citation-source (car citation) sources))))
+    (get-citation-source (car citation) sources) citation-style)))
 
 (defun make-citation-pages (pages)
   (if (or (position #\, pages) (position #\- pages))
@@ -236,7 +254,7 @@
 (defun make-latex-bibliography-item (citation object)
   "Return a formatted latex bibliography item."
   (str:concat (bibitem (car citation))
-			  (make-citation citation (bibliography object))
+			  (make-citation citation (bibliography object) (citation-style object))
 			  (when (> (length citation) 1) (make-citation-pages (cadr citation)))
 			  "~%~%"))
 

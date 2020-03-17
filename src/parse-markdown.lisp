@@ -21,6 +21,10 @@
          :accessor date
          :documentation "Markdown contents' date specified in the header.")
 
+   (citation-style :initform :apa
+         :accessor citation-style
+         :documentation "Citation style (currently only APA is available) defined in the header.")
+
    (body :initform nil
          :accessor body
          :documentation "Markdown contents between header and bibliography of EOF.")
@@ -131,8 +135,8 @@
   (let ((header-string (string-between *delimiter-default* *delimiter-default* string)))
     (setf (author object) (parse-quoted-param "author" header-string))
     (setf (date object) (parse-quoted-param "date" header-string))
-    (setf (location object) (parse-quoted-param "location" header-string))))
-
+    (setf (location object) (parse-quoted-param "location" header-string))
+    (setf (citation-style object) (parse-quoted-param "citation-style" header-string))))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Body parsing                                                                                 ;;;

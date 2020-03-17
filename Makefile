@@ -44,6 +44,6 @@ uninstall:
 test:
 	sbcl --noinform \
 		   --disable-debugger \
-	     --load ibidem-test.asd \
+		   --eval "(push #p\"$(CURRENT_DIR_STRING)\" asdf:*central-registry*)" \
 		   --eval "(ql:quickload :ibidem-test)" \
 			 --eval "(progn (rove:run :ibidem-test) (sb-ext:quit))" \

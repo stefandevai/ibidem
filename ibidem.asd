@@ -2,15 +2,15 @@
 ;;;; ibidem.asd                                                                                 ;;;;
 ;;;; ========================================================================================== ;;;;
 
-(asdf:defsystem #:ibidem
-  :description "Converts a custom markdown syntax file to latex."
+(asdf:defsystem "ibidem"
+  :description "CLI tool that makes it easier to write academic papers with citations."
   :author "Stefan Devai <stedevai@gmail.com>"
   :license  "MIT"
   :version "0.0.3"
   :build-operation "program-op"
   :build-pathname "./build/ibidem"
   :entry-point "ibidem:main"
-  :depends-on (#:str #:cl-ppcre #:unix-opts)
+  :depends-on ("str" "cl-ppcre" "unix-opts")
   :components ((:module "src"
                 :components
                  ((:file "package")

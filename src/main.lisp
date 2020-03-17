@@ -23,26 +23,20 @@
   "Print intro for cli tool."
   (format t "
 
-\`7XXF\'            XXP\"\"XX\"\"YXX    \`YXX\'   \`XP\'
-  XX              P'   XX   `7      VXb.  ,P
-  XX         ,6\"Yb.    XX  .gP\"Ya    \`XX.X\'
-  XX        8)   XX    XX ,X\'   Yb     XXb
-  XX      ,  ,pm9XX    XX 8X\"\"\"\"\"\"   ,X\'\`Xb.
-  XX     ,X 8X   XX    XX YX.    ,  ,P   \`XX.
-.JXXmmmmXXX \`Xoo9^Yo..JXXL.\`Xbmmd\'.XX:.  .:XXa.
+           88888                         888888
+     888    888            8888           8888
+    8888   8888            8888           8888
+     88    888              88            888
+          8888  *888                 *88 8888       *888           *88     *88
+ 88888    88888888888  888888     8888  8888      8888888  88888 8888888 8888888
+  8888   88888   8888    8888    888    8888    888   888   888888  888888  888
+ 8888    8888    8888   8888   8888    8888    8888888      88888  88888   8888
+ 888    8888    8888    888    888    8888    8888         8888    8888   8888
+888888  8888   8888    888888 8888  88888888  8888   88   8888    8888    888888
+88889   888888889      88889   888889  8889    Y88888\"    888    8888     8888
 
 
-                         ,,    ,,        ,,
-`7XX\"\"\"Yp,               db  \`7XX      \`7XX
-  XX    Yb                     XX        XX
-  XX    dP \`7XX  \`7XX  \`7XX    XX   ,X\"\"bXX  .gP\"Ya \`7Xb,od8
-  XX\"\"\"bg.   XX    XX    XX    XX ,AP    XX ,X\'   Yb  XX\' \"\'
-  XX    \`Y   XX    XX    XX    XX 8XI    XX 8X\"\"\"\"\"\"  XX
-  XX    ,9   XX    XX    XX    XX \`Xb    XX YX.    ,  XX
-.JXXmmmd9    \`Xbod\"YXL..JXXL..JXXL.\`Wbmd\"XXL.\`Xbmmd\'.JXXL.
-
-
- Latex formatting automation.
+ Easier way to write academic papers with citations.
 
 ================================================================
  AUTHOR: Stefan Devai

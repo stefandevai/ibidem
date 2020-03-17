@@ -1,5 +1,8 @@
-# IBIDEM
-[![Build Status](https://travis-ci.com/stefandevai/ibidem.svg?branch=master)](https://travis-ci.com/stefandevai/ibidem)
+<p align="center">
+  <img src="./asset/logo-optimized.svg" alt="Ibidem logo" height="130px"><br><br><br>
+  <a href="https://travis-ci.com/stefandevai/ibidem"><img src="https://img.shields.io/travis/stefandevai/ibidem?style=flat-square" alt="Build Status"></href>
+  <a href="https://travis-ci.com/stefandevai/ibidem"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License: MIT"></href>
+</p>
 
 CLI tool that makes it easier to write academic papers with citations. It uses a markdown to LaTeX conversion.
 

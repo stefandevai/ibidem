@@ -1,17 +1,16 @@
 <p align="center">
-  <img src="./asset/logo-optimized.svg" alt="Ibidem logo" height="130px"><br><br><br>
+  <br><img src="./asset/logo-optimized.svg" alt="Ibidem logo" height="130px"><br><br><br>
   <a href="https://travis-ci.com/stefandevai/ibidem"><img src="https://img.shields.io/travis/stefandevai/ibidem?style=flat-square" alt="Build Status"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License: MIT"></a>
 </p>
-
-CLI tool that makes it easier to write academic papers with citations. It uses a markdown to LaTeX conversion.
+<br><br>
 
 ## What is it about?
 
-The purpose of this utility is to automate the formatting of academic articles or essays:
+*Ibidem* makes it easier to write academic papers with citations. It uses a markdown to LaTeX conversion:
 
 - We write a file on a [superset](#superset-of-markdowns-syntax) of [markdown's syntax](https://daringfireball.net/projects/markdown/).
-- *latex-builder* converts it to a basic *LaTeX* file.
+- *Ibidem* converts it to a *LaTeX* file.
 
 ## How to use?
 
@@ -21,21 +20,21 @@ Currently it has only been tested in Linux and OS X using SBCL.
 
 1. Make sure that you have [SBCL](http://www.sbcl.org/), [quicklisp](https://www.quicklisp.org/beta/) and [asdf](https://common-lisp.net/project/asdf/) installed.
 
-2. Run `git clone https://github.com/stefandevai/latex-builder && cd latex-builder` on a terminal.
+2. Run `git clone https://github.com/stefandevai/ibidem && cd ibidem` on a terminal.
 
 3. Run `make && cd bin/` to build the program.
 
-4. Run `./latex-builder input-path -o output-path`, where `input-path` is the markdown file and `output-path` is the path and name of the output `.tex` file.
+4. Run `./ibidem input-path -o output-path`, where `input-path` is the markdown file and `output-path` is the path and name of the output `.tex` file.
 
 ### Second option: *run from the REPL*
 
 1. Make sure that you have [SBCL](http://www.sbcl.org/), [quicklisp](https://www.quicklisp.org/beta/) and [asdf](https://common-lisp.net/project/asdf/) installed.
 
-2. Run `git clone https://github.com/stefandevai/latex-builder && cd latex-builder` on a terminal.
+2. Run `git clone https://github.com/stefandevai/ibidem && cd ibidem` on a terminal.
 
-3. Run the SBCL's REPL and enter `(load "latex-builder.asd")`.
+3. Run the SBCL's REPL and enter `(load "ibidem.asd")`.
 
-4. Run `(latex-builder:create input-path output-path)` where `input-path` is the markdown file and `output-path` is the path and name of the output `.tex` file.
+4. Run `(ibidem:create input-path output-path)` where `input-path` is the markdown file and `output-path` is the path and name of the output `.tex` file.
 
 
 ## Superset of Markdown's syntax

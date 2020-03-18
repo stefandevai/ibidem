@@ -183,38 +183,59 @@
   "Build a single citation according to the style provided in `citation-style'."
   (let ((style (get-citation-style citation-style)))
 	(mapcar #'(lambda (element)
-				(format t (str:concat (slot-value source element) "~%"))
 				(setq style (add-citation-element element source style)))
 			(mapcar #'sb-mop:slot-definition-name
 					(sb-mop:class-slots (class-of source))))
-	(format t (str:concat style "~%"))
 	style))
 
 (defun add-citation-element (element source style)
   "Return source element replaced in style"
   (case element
-	(:id style)
-	(:author (replace-author-value source style))
+	(id style)
+	(web-link (replace-element-value element source style :element-str "url"))
+	(author (replace-author-value source style))
 	(otherwise (replace-element-value element source style))))
 
-(defun replace-element-value (element source style)
-  (if (slot-value source element) ; If element value is not nil
-	  (ppcre:regex-replace (string-downcase (write-to-string element))
-						   style
-						   (slot-value source element))
-	  style))
+(defun replace-element-value (element source style &key (element-str nil))
+  (let* ((element-string (or element-str (string-downcase (write-to-string element))))
+		 (element-style (find-element-style element-string style))
+		 (element-value (slot-value source element)))
+	
+	(if element-style
+		(if element-value
+			(ppcre:regex-replace
+			 (str:concat "\\Q" element-style)
+			 style
+			 (str:substring 1 -1 (ppcre:regex-replace element-string
+													  element-style
+													  element-value)))
+			(ppcre:regex-replace (str:concat "\\Q" element-style) style ""))
+		style)))
 
-(defun add-citation-case (source style)
-  "Return a style string containing the element in uppercase or downcase
-   TODO: Take in consideration allcaps or downcase"
-  ())
+
+(defun find-element-style (element style)
+  "Return single element style in a style string.
+
+  Example:
+  (find-element-style \"article\" \"[author, ] [article.]\")
+  ;; \"[article.]\""
+  (multiple-value-bind (element-start element-end) (cl-ppcre:scan element style)
+	(when (and element-start element-end)	  
+	  (let* ((element-style-start (search "[" style :from-end t :end2 element-start))
+			 (element-style-end (search "]" style :start2 element-end)))
+		(when (and element-style-start element-style-end)
+		  (str:substring element-style-start (1+ element-style-end) style))))))
+
+(defun replace-author-value (source style)
+  "Return a style string containing the element in uppercase or downcase"
+  ()
+  style)
 
 (defun get-citation-style (string)
   "Return a built-in citation style or a customized one."
   (preprocess-style
    (if (and (str:starts-with? "[" string) (str:ends-with? "]" string))
 	   string
-	   
 	   (let ((style (getf *citation-styles*
 						  (intern (string-upcase string) :keyword))))
 		 (if style
@@ -225,9 +246,7 @@
 (defun preprocess-style (string)
   "Add bold, italic and trim style string."
   (make-latex-emphasis
-   (make-latex-bold
-	(str:trim
-	 (str:substring 1 -1 string)))))
+   (make-latex-bold string)))
 
 (defun author-surname-initials (string)
   "Return author' surname followed by the initials of the other names.

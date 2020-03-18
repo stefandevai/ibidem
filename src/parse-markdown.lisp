@@ -78,6 +78,10 @@
 			:accessor edition
 			:documentation "Source's edition.")
 
+   (volume :initform nil
+		  :accessor volume
+		  :documentation "Source's volume.")
+
    (issue :initform nil
 		  :accessor issue
 		  :documentation "Source's issue.")

@@ -17,8 +17,8 @@
   "Global style for citations in biliography.")
 
 (defvar *citation-styles*
-		(list :apa "[surname, initials. (year). article. *source*. other. location. edition(issue). page. url]"
-								:other "[SURNAME name, article.]")
+		(list :apa "[surname, initials. ][(year). ][article. ][*source*. ][other. ][location. ][edition. ][volume][(issue). ][page. ][url]"
+								:other "[SURNAME name, ][article.]")
   "Order and style rules to generate citations.")
 
 (defvar *default-citation-format* :apa

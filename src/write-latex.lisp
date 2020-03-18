@@ -83,7 +83,6 @@
 
 (defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
-  (format t "here~%")
   (begin-end "quote"
 	(textit
 	  (reduce
@@ -180,43 +179,55 @@
 ;;; Bibliography writing                                                                         ;;;
 ;;; -------------------------------------------------------------------------------------------- ;;;
 
-(defmacro build-citation (source citation-style)
-  "Build a single citation according to a format provided in `source'."
-  (let ((style-params (gensym))
-        (params (gensym)))
-    `(let* ((,style-params (get-citation-style ,citation-style))
-			(,params (getf ,style-params
-						   (read-from-string
-							(str:concat ":"
-										(slot-value ,source
-													'ctype))))))
-       (reduce #'str:concat
-               (loop :for param :in ,params
-					 :collect (cond ((listp param)
-									 (let ((param-value (slot-value ,source (cadr param))))
-									   (when param-value
-										 (str:concat (eval (list (car param) param-value))
-													 (reduce #'str:concat (cddr param))))))
-									(t (when (slot-value ,source param)
-										 (str:concat (slot-value ,source param) ". ")))))))))
+(defun build-citation (source citation-style)
+  "Build a single citation according to the style provided in `citation-style'."
+  (let ((style (get-citation-style citation-style)))
+	(mapcar #'(lambda (element)
+				(format t (str:concat (slot-value source element) "~%"))
+				(setq style (add-citation-element element source style)))
+			(mapcar #'sb-mop:slot-definition-name
+					(sb-mop:class-slots (class-of source))))
+	(format t (str:concat style "~%"))
+	style))
+
+(defun add-citation-element (element source style)
+  "Return source element replaced in style"
+  (case element
+	(:id style)
+	(:author (replace-author-value source style))
+	(otherwise (replace-element-value element source style))))
+
+(defun replace-element-value (element source style)
+  (if (slot-value source element) ; If element value is not nil
+	  (ppcre:regex-replace (string-downcase (write-to-string element))
+						   style
+						   (slot-value source element))
+	  style))
+
+(defun add-citation-case (source style)
+  "Return a style string containing the element in uppercase or downcase
+   TODO: Take in consideration allcaps or downcase"
+  ())
 
 (defun get-citation-style (string)
-  "Return a built-in citation style or a customized one.
+  "Return a built-in citation style or a customized one."
+  (preprocess-style
+   (if (and (str:starts-with? "[" string) (str:ends-with? "]" string))
+	   string
+	   
+	   (let ((style (getf *citation-styles*
+						  (intern (string-upcase string) :keyword))))
+		 (if style
+			 style
+			 (getf *citation-styles*
+				   *default-citation-style*))))))
 
-  Examples:
-  (citation-format \"APA\")
-  (citation-format \"[SURNAME name, « title », source, volume, publisher, year, pages.]\")"
-  (if (and (str:starts-with? "[" string) (str:ends-with? "]" string))
-						(build-citation-style string)
-						(let ((style (getf *citation-formats*
-																									(intern (string-upcase string) :keyword))))
-								(if style
-												style
-												(getf *citation-formats* *default-citation-format*)))))
-
-(defun build-citation-style (string)
-		"TODO: return a default citation style from a string"
-		(getf *citation-formats* *default-citation-format*))
+(defun preprocess-style (string)
+  "Add bold, italic and trim style string."
+  (make-latex-emphasis
+   (make-latex-bold
+	(str:trim
+	 (str:substring 1 -1 string)))))
 
 (defun author-surname-initials (string)
   "Return author' surname followed by the initials of the other names.
@@ -230,8 +241,6 @@
                 (reduce #'str:concat
                         (mapcar (lambda (name) (str:concat (str:s-first name) ". "))
                                 (reverse (cdr (reverse names))))))))
-
-
 
 (defun get-citation-source (citation-id sources)
   "Return a `citation-source' from `sources' list where its id is equal to `citation-id'."

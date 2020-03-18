@@ -37,89 +37,80 @@ Les groupes indiens que ne veulent pas le conflit ni la soumission aux colons, o
 ~~~bibliography
 ---
 id: "stock"
-type: "article"
 author: "William G. Jacoby"
-title: "William G. Jacoby"
-url: "https://www.jstor.org/tc/accept?origin=%2Fstable%2Fpdf%2F3155498.pdf%3Fab_segments%3D0%252Fbasic_SYC-5055%252Fcontrol&is_image=False"
-journal: "American Journal of Political Science"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
 ---
 
 ---
 id: "britt"
-type: "article"
-author: "britt"
-title: "William G. Jacoby"
-url: "https://www.britannica.com/topic/Native-American/Native-Americans-and-colonization-the-16th-and-17th-centuries"
-journal: "American Journal of Political Science"
+author: "William G. Jacoby"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.britannica.com/topic/Native-American/Native-Americans-and-colonization-the-16th-and-17th-centuries"
 ---
 
 ---
 id: "poter"
-type: "article"
-author: "poter"
-title: "William G. Jacoby"
-url: "https://www.jstor.org/stable/pdf/1124016.pdf?ab_segments=0%2Fbasic_SYC-5055%2Fcontrol"
-journal: "American Journal of Political Science"
+author: "William G. Jacoby"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.jstor.org/stable/pdf/1124016.pdf?ab_segments=0%2Fbasic_SYC-5055%2Fcontrol"
 ---
 
 ---
 id: "britt2"
-type: "article"
-author: "britt2"
-title: "William G. Jacoby"
-url: "https://www.britannica.com/topic/Puritanism"
-journal: "American Journal of Political Science"
+author: "William G. Jacoby"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.britannica.com/topic/Puritanism"
 ---
 
 ---
 id: "eliot"
-type: "article"
-author: "eliot"
-title: "William G. Jacoby"
-url: "https://www.jstor.org/stable/pdf/25056633.pdf?casa_token=5LnVilOu894AAAAA:5pFfdhwzFt7MMYeQehAdrKtd1gAP-KeJf4weYV32ztdj62_d7rm8Qh_nM7c1cn1RNwld-28L7pYEuuKniSBjXMDXWv9LzE9oQCWRyy1JkO7ZZI-92HjI"
-journal: "American Journal of Political Science"
+author: "William G. Jacoby"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.jstor.org/stable/pdf/25056633.pdf?casa_token=5LnVilOu894AAAAA:5pFfdhwzFt7MMYeQehAdrKtd1gAP-KeJf4weYV32ztdj62_d7rm8Qh_nM7c1cn1RNwld-28L7pYEuuKniSBjXMDXWv9LzE9oQCWRyy1JkO7ZZI-92HjI"
 ---
 
 ---
 id: "fisher"
-type: "article"
-author: "fisher"
-title: "William G. Jacoby"
-url: "https://www.jstor.org/stable/pdf/40211987.pdf?refreqid=excelsior%3Aa989be184a45495cd7828476cfe6a15d"
-journal: "American Journal of Political Science"
+author: "William G. Jacoby"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.jstor.org/stable/pdf/40211987.pdf?refreqid=excelsior%3Aa989be184a45495cd7828476cfe6a15d"
 ---
 
 ---
 id: "code"
-type: "article"
 author: "William G. Jacoby"
-title: "code"
-url: "https://www.law.cornell.edu/uscode/text/42/1996"
-journal: "American Journal of Political Science"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.law.cornell.edu/uscode/text/42/1996"
 ---
 
 ---
 id: "eliot2"
-type: "article"
 author: "William G. Jacoby"
-title: "eliot2"
-url: "https://www.jstor.org/stable/pdf/1918981.pdf?casa_token=KGMgZuK-gBIAAAAA:NnZFph9vFNuhdbe0BG8KnskZ9Si_hR7uBXALHDWt6MmxcakMH0l1b8afOGpwKSayRW6260oJ1preNUY3i2X0C-3ELX7VX4LavUHj3DPmC3oS5Ok5QCFx"
-journal: "American Journal of Political Science"
+article: "A good title"
+source: "American Journal of Political Science"
 year: "1994"
-volume-issue: "38(2)"
+edition: "3"
+url: "https://www.jstor.org/stable/pdf/1918981.pdf?casa_token=KGMgZuK-gBIAAAAA:NnZFph9vFNuhdbe0BG8KnskZ9Si_hR7uBXALHDWt6MmxcakMH0l1b8afOGpwKSayRW6260oJ1preNUY3i2X0C-3ELX7VX4LavUHj3DPmC3oS5Ok5QCFx"
 ---
 ~~~

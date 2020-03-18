@@ -34,7 +34,7 @@ clean:
 .PHONY: install
 install:
 	install -d $(DESTDIR)$(PREFIX)/bin/
-	install -m 755 $(BUILD_PATH)/$(EXECUTABLE_NAME) $(DESTDIR)$(PREFIX)/bin/
+	sudo install -m 755 $(BUILD_PATH)/$(EXECUTABLE_NAME) $(DESTDIR)$(PREFIX)/bin/
 
 .PHONY: uninstall
 uninstall:

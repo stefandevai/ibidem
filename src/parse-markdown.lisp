@@ -44,35 +44,68 @@
        :accessor id
        :documentation "Unique id for this citation source.")
 
-   (ctype :initform nil
-          :accessor ctype
-          :documentation "Type of source: article or web.")
+   (citation :initform nil
+			 :accessor citation
+			 :documentation "If not `nil`, the string provided will replace any styled citation.")
 
    (author :initform nil
+		   :initarg :author
            :accessor author
            :documentation "Author or authors of source.")
 
-   (title :initform nil
-          :accessor title
-          :documentation "Source's title.")
+   (article :initform nil
+			:initarg :article
+			:accessor article
+			:documentation "Article's title.")
 
-   (journal :initform nil
-            :accessor journal
-            :documentation "Journal of publication if source is of article type.")
+   (source :initform nil
+		   :accessor source
+		   :documentation "Source of article.")
 
    (year :initform nil
          :accessor year
          :documentation "Year of source's publication.")
 
-   (volume-issue :initform nil
-                 :accessor volume-issue
-                 :documentation "Issue and volume if source is of article type.")
+   (publisher :initform nil
+			  :accessor publisher
+			  :documentation "The publisher in charge of the publication.")
+
+   (translation :initform nil
+				:accessor translation
+				:documentation "Translation information.")
+
+   (edition :initform nil
+			:accessor edition
+			:documentation "Source's edition.")
+
+   (issue :initform nil
+		  :accessor issue
+		  :documentation "Source's issue.")
+
+   (location :initform nil
+			 :accessor location
+			 :documentation "Place where the publication was made.")
+
+   (page :initform nil
+		 :accessor page
+		 :documentation "Page(s) of the cited article. E.g.: \"47\", \"47,48\" or \"47-50\".")
+
+   (other :initform nil
+		  :accessor other
+		  :documentation "Aditional information for the citation.")
 
    (web-link :initform nil
              :accessor web-link
              :documentation "Resource's url if source is of web type."))
 
   (:documentation "Hold information about a single citation source."))
+
+(defmethod print-object ((obj citation-source) stream)
+      (print-unreadable-object (obj stream :type t)
+        (with-accessors ((id id)
+                         (author author))
+            obj
+          (format stream "id: ~a, author: ~a~%" id author))))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Helper functions and macros                                                                  ;;;
@@ -243,17 +276,15 @@
         (pushnew (parse-citation-source source-string) (bibliography object))))))
 
 (defun parse-citation-source (string)
-  "Parse citation source fields contained in `string' and return a instance of `citation-source'."
   (let ((source (make-instance 'citation-source)))
-    (setf (id source) (parse-quoted-param "id" string))
-    (setf (ctype source) (parse-quoted-param "type" string))
-    (setf (author source) (parse-quoted-param "author" string))
-    (setf (title source) (parse-quoted-param "title" string))
-    (setf (journal source) (parse-quoted-param "journal" string))
-    (setf (year source) (parse-quoted-param "year" string))
-    (setf (volume-issue source) (parse-quoted-param "volume-issue" string))
-    (setf (web-link source) (parse-quoted-param "url" string))
-    (return-from parse-citation-source source)))
+  	(mapcar #'(lambda (element)
+				(setf (slot-value source element)
+					  (parse-quoted-param (string-downcase (write-to-string
+															element))
+										  string)))
+			(mapcar #'sb-mop:slot-definition-name
+					(sb-mop:class-slots (class-of source))))
+	(return-from parse-citation-source source)))
 
 (defun parse-citations (string object)
   "Parses each citation contained in `string' and push them to `citations' in `object'."

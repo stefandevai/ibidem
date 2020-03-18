@@ -266,25 +266,21 @@
   (let* ((citation-id (subseq citation-id 0 (search "-" citation-id))))
 	(find-if (lambda (x) (string= citation-id (id x))) sources)))
 
-(defun make-citation (citation sources citation-style)
-  "Return a formatted latex citation.
-  `string' cointains information about the citation as \"citation-id:pages\";
-  `sources' contains a list of `citation-source'."
-  (str:concat
-   (build-citation
-    (get-citation-source (car citation) sources) citation-style)))
-
 (defun make-citation-pages (pages)
   (if (or (position #\, pages) (position #\- pages))
-      (str:concat "pp. " pages ". ")
-      (str:concat "p. " pages ". " )))
+      (str:concat "pp. " pages)
+      (str:concat "p. " pages)))
 
 (defun make-latex-bibliography-item (citation object)
   "Return a formatted latex bibliography item."
-  (str:concat (bibitem (car citation))
-			  (make-citation citation (bibliography object) (citation-style object))
-			  (when (> (length citation) 1) (make-citation-pages (cadr citation)))
-			  "~%~%"))
+  (let* ((citation-id (car citation))
+		 (citation-source (get-citation-source citation-id (bibliography object))))
+	
+	(when (> (length citation) 1)
+	  (setf (slot-value citation-source 'page) (make-citation-pages (cadr citation))))
+	(str:concat (bibitem citation-id)
+				(build-citation citation-source (citation-style object))
+				"~%~%")))
 
 (defun make-latex-bibliography (object)
   "Return a formatted latex bibliography.

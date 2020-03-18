@@ -189,29 +189,29 @@
 	style))
 
 (defun add-citation-element (element source style)
-  "Return source element replaced in style"
+  "Return `element' value contained in `source' replaced in `style'."
   (case element
 	(id style)
-	(web-link (replace-element-value element source style :element-str "url"))
+	(www (replace-element-value element source style :extra-style (lambda (x) (url x))))
 	(author (replace-author-value source style))
 	(otherwise (replace-element-value element source style))))
 
-(defun replace-element-value (element source style &key (element-str nil))
-  (let* ((element-string (or element-str (string-downcase (write-to-string element))))
+(defun replace-element-value (element source style &key (extra-style (lambda (string) string)))
+  "Return `style' string replaced with a `element' value contained in `source'.
+   There's also the possibility of adding custom style with `extra-style'."
+  (let* ((element-string (string-downcase (write-to-string element)))
 		 (element-style (find-element-style element-string style))
-		 (element-value (slot-value source element)))
-	
+		 (element-value (slot-value source element)))	
 	(if element-style
 		(if element-value
 			(ppcre:regex-replace
 			 (str:concat "\\Q" element-style)
 			 style
-			 (str:substring 1 -1 (ppcre:regex-replace element-string
+			 (funcall extra-style (str:substring 1 -1 (ppcre:regex-replace element-string
 													  element-style
-													  element-value)))
+													  element-value))))
 			(ppcre:regex-replace (str:concat "\\Q" element-style) style ""))
 		style)))
-
 
 (defun find-element-style (element style)
   "Return single element style in a style string.

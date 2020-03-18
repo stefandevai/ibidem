@@ -45,62 +45,62 @@
        :documentation "Unique id for this citation source.")
 
    (citation :initform nil
-			 :accessor citation
-			 :documentation "If not `nil`, the string provided will replace any styled citation.")
+													:accessor citation
+													:documentation "If not `nil`, the string provided will replace any styled citation.")
 
    (author :initform nil
-		   :initarg :author
+											:initarg :author
            :accessor author
            :documentation "Author or authors of source.")
 
    (article :initform nil
-			:initarg :article
-			:accessor article
-			:documentation "Article's title.")
+												:initarg :article
+												:accessor article
+												:documentation "Article's title.")
 
    (source :initform nil
-		   :accessor source
-		   :documentation "Source of article.")
+											:accessor source
+											:documentation "Source of article.")
 
    (year :initform nil
          :accessor year
          :documentation "Year of source's publication.")
 
    (publisher :initform nil
-			  :accessor publisher
-			  :documentation "The publisher in charge of the publication.")
+														:accessor publisher
+														:documentation "The publisher in charge of the publication.")
 
    (translation :initform nil
-				:accessor translation
-				:documentation "Translation information.")
+																:accessor translation
+																:documentation "Translation information.")
 
    (edition :initform nil
-			:accessor edition
-			:documentation "Source's edition.")
+												:accessor edition
+												:documentation "Source's edition.")
 
    (volume :initform nil
-		  :accessor volume
-		  :documentation "Source's volume.")
+											:accessor volume
+											:documentation "Source's volume.")
 
    (issue :initform nil
-		  :accessor issue
-		  :documentation "Source's issue.")
+										:accessor issue
+										:documentation "Source's issue.")
 
    (location :initform nil
-			 :accessor location
-			 :documentation "Place where the publication was made.")
+													:accessor location
+													:documentation "Place where the publication was made.")
 
    (page :initform nil
-		 :accessor page
-		 :documentation "Page(s) of the cited article. E.g.: \"47\", \"47,48\" or \"47-50\".")
+									:accessor page
+									:documentation "Page(s) of the cited article. E.g.: \"47\", \"47,48\" or \"47-50\".")
 
    (other :initform nil
-		  :accessor other
-		  :documentation "Aditional information for the citation.")
+										:accessor other
+										:documentation "Aditional information for the citation.")
 
-   (web-link :initform nil
-             :accessor web-link
-             :documentation "Resource's url if source is of web type."))
+   (www :initform nil
+								:accessor www
+								:documentation "Resource's url if source is of web type."))
 
   (:documentation "Hold information about a single citation source."))
 

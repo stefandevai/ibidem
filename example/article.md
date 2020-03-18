@@ -51,7 +51,7 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.britannica.com/topic/Native-American/Native-Americans-and-colonization-the-16th-and-17th-centuries"
+www: "https://www.britannica.com/topic/Native-American/Native-Americans-and-colonization-the-16th-and-17th-centuries"
 ---
 
 ---
@@ -61,7 +61,7 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.jstor.org/stable/pdf/1124016.pdf?ab_segments=0%2Fbasic_SYC-5055%2Fcontrol"
+www: "https://www.jstor.org/stable/pdf/1124016.pdf?ab_segments=0%2Fbasic_SYC-5055%2Fcontrol"
 ---
 
 ---
@@ -71,7 +71,7 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.britannica.com/topic/Puritanism"
+www: "https://www.britannica.com/topic/Puritanism"
 ---
 
 ---
@@ -81,7 +81,7 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.jstor.org/stable/pdf/25056633.pdf?casa_token=5LnVilOu894AAAAA:5pFfdhwzFt7MMYeQehAdrKtd1gAP-KeJf4weYV32ztdj62_d7rm8Qh_nM7c1cn1RNwld-28L7pYEuuKniSBjXMDXWv9LzE9oQCWRyy1JkO7ZZI-92HjI"
+www: "https://www.jstor.org/stable/pdf/25056633.pdf?casa_token=5LnVilOu894AAAAA:5pFfdhwzFt7MMYeQehAdrKtd1gAP-KeJf4weYV32ztdj62_d7rm8Qh_nM7c1cn1RNwld-28L7pYEuuKniSBjXMDXWv9LzE9oQCWRyy1JkO7ZZI-92HjI"
 ---
 
 ---
@@ -91,7 +91,7 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.jstor.org/stable/pdf/40211987.pdf?refreqid=excelsior%3Aa989be184a45495cd7828476cfe6a15d"
+www: "https://www.jstor.org/stable/pdf/40211987.pdf?refreqid=excelsior%3Aa989be184a45495cd7828476cfe6a15d"
 ---
 
 ---
@@ -101,7 +101,7 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.law.cornell.edu/uscode/text/42/1996"
+www: "https://www.law.cornell.edu/uscode/text/42/1996"
 ---
 
 ---
@@ -111,6 +111,6 @@ article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
 edition: "3"
-url: "https://www.jstor.org/stable/pdf/1918981.pdf?casa_token=KGMgZuK-gBIAAAAA:NnZFph9vFNuhdbe0BG8KnskZ9Si_hR7uBXALHDWt6MmxcakMH0l1b8afOGpwKSayRW6260oJ1preNUY3i2X0C-3ELX7VX4LavUHj3DPmC3oS5Ok5QCFx"
+www: "https://www.jstor.org/stable/pdf/1918981.pdf?casa_token=KGMgZuK-gBIAAAAA:NnZFph9vFNuhdbe0BG8KnskZ9Si_hR7uBXALHDWt6MmxcakMH0l1b8afOGpwKSayRW6260oJ1preNUY3i2X0C-3ELX7VX4LavUHj3DPmC3oS5Ok5QCFx"
 ---
 ~~~

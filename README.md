@@ -1,5 +1,5 @@
 <p align="center">
-  <br><img src="./asset/logo-optimized.svg" alt="Ibidem logo" height="130px"><br><br><br>
+  <br><img src="./asset/logo.png" alt="Ibidem logo" height="130px"><br><br><br>
   <a href="https://travis-ci.com/stefandevai/ibidem"><img src="https://img.shields.io/travis/stefandevai/ibidem?style=flat-square" alt="Build Status"></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="License: MIT"></a>
 </p>

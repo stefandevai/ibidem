@@ -280,7 +280,6 @@
 (defun parse-citation-source (string)
   (let ((source (make-instance 'citation-source)))
   	(mapcar #'(lambda (element)
-				(format t "~a~%" (symbol-name element))
 				(setf (slot-value source element)
 					  (parse-quoted-param (string-downcase (symbol-name element))
 										  string)))

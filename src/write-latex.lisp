@@ -72,23 +72,22 @@
      (make-latex-url
       (make-latex-href
        (make-latex-image
-	(latex-escape
-	 (ecase (getf line :line-type)
-	   (:paragraph (getf line :content))
-	   (:list (make-latex-list (getf line :content)))
-	   ((or :section :subsection :subsubsection)
-	    (make-latex-heading (getf line :content)))
-	   (:quote (make-latex-quote (getf line :content))))))))))
+		(latex-escape
+		 (ecase (getf line :line-type)
+		   (:paragraph (getf line :content))
+		   (:list (make-latex-list (getf line :content)))
+		   ((or :section :subsection :subsubsection)
+			(make-latex-heading (getf line :content)))
+		   (:quote (make-latex-quote (getf line :content))))))))))
    "~%~%"))
 
 (defun make-latex-quote (lines)
   "Return a formatted string as latex quote."
-  (format t "here~%")
   (begin-end "quote"
-	     (textit
-	      (reduce
-	       #'str:concat
-	       (mapcar
+	(textit
+	  (reduce
+	   #'str:concat
+	   (mapcar
 		(lambda (line)
 		  (str:concat
 		   (str:substring
@@ -102,8 +101,8 @@
 (defun make-latex-list (items)
   "Return a formatted string as a latex list of `items'."
   (begin-end "itemize"
-	     (reduce
-	      #'str:concat
+	(reduce
+	 #'str:concat
      (mapcar
       #'(lambda (line)
           (str:concat "\\item"
@@ -116,9 +115,9 @@
   (let* ((trimmed-heading (str:trim-left string))
          (space-index (position #\Space trimmed-heading))
          (section-str (case space-index
-                       (1 "section*")
-                       (2 "subsection*")
-                       (otherwise "subsubsection*"))))
+						(1 "section*")
+						(2 "subsection*")
+						(otherwise "subsubsection*"))))
 
     (latex-element section-str nil
       (str:trim-left (str:substring space-index nil trimmed-heading)))))
@@ -168,87 +167,219 @@
   ;; => \"A url: \\url{https://test.com/}. Another one: \\url{http://as.com/}.\""
   (let ((result text))
     (ppcre:do-register-groups
-     (cap link)
-     ("!\\[([^\\]]+|.*)\\]\\((\\S+)\\)" text)
-     (setq result
-	   (str:replace-all (str:concat "![" cap "](" link ")")
-			    (image link cap)
-			    result)))
+		(cap link)
+		("!\\[([^\\]]+|.*)\\]\\((\\S+)\\)" text)
+	  (setq result
+			(str:replace-all (str:concat "![" cap "](" link ")")
+							 (image link cap)
+							 result)))
     result))
 
 ;;; -------------------------------------------------------------------------------------------- ;;;
 ;;; Bibliography writing                                                                         ;;;
 ;;; -------------------------------------------------------------------------------------------- ;;;
 
-(defmacro build-citation (source)
-  "Builds a single citation according to a format provided in `source'."
-  (let ((style-params (getf *citation-format*
-                            *citation-style*))
-        (params (gensym)))
-    `(let ((,params (getf ,style-params
-                          (read-from-string
-                           (str:concat ":"
-                                       (slot-value ,source
-                                                   'ctype))))))
-       (reduce #'str:concat
-               (loop :for param :in ,params
-                  :collect (cond ((listp param)
-                                  (let ((param-value (slot-value ,source (cadr param))))
-                                    (when param-value
-                                      (str:concat (eval (list (car param) param-value))
-                                                  (reduce #'str:concat (cddr param))))))
-                                 (t (when (slot-value ,source param)
-                                      (str:concat (slot-value ,source param) ". ")))))))))
+(defun build-citation (source citation-style)
+  "Build a single citation according to the style provided in `citation-style'."
+  (let ((style (get-citation-style citation-style)))
+	(mapcar #'(lambda (element)
+				(setq style (add-citation-element element source style)))
+			(mapcar #'sb-mop:slot-definition-name
+					(sb-mop:class-slots (class-of source))))
+	style))
 
-(defun author-surname-initials (string)
-  "Return author' surname followed by the initials of the other names.
+(defun add-citation-element (element source style)
+  "Return `element' value contained in `source' replaced in `style'."
+  (case element
+	(id style)
+	(www (replace-element-value element source style :extra-style (lambda (x) (url x))))
+	(author (replace-author-value source style))
+	(otherwise (replace-element-value element source style))))
+
+(defun replace-element-value (element source style &key (extra-style (lambda (string) string)))
+  "Return `style' string replaced with a `element' value contained in `source'.
+   There's also the possibility of adding custom style with `extra-style'."
+  (let* ((element-string (string-downcase (symbol-name element)))
+		 (element-style (find-element-style element-string style))
+		 (element-value (slot-value source element)))	
+	(if element-style
+		(if element-value
+			(ppcre:regex-replace
+			 (str:concat "\\Q" element-style)
+			 style
+			 (funcall extra-style (str:substring 1 -1 (ppcre:regex-replace element-string
+													  element-style
+													  element-value))))
+			(ppcre:regex-replace (str:concat "\\Q" element-style) style ""))
+		style)))
+
+(defun find-element-style (element style)
+  "Return single element style in a style string.
 
   Example:
-  (author-surname-initials \"Fernand Paul Achille Braudel\")
-  ;; => \"Braudel, F. P. A.\""
-  (let ((names (str:split #\Space string)))
-    (str:concat (car (reverse names))
-                ", "
-                (reduce #'str:concat
-                        (mapcar (lambda (name) (str:concat (str:s-first name) ". "))
-                                (reverse (cdr (reverse names))))))))
+  (find-element-style \"article\" \"[author, ] [article.]\")
+  ;; \"[article.]\""
+  (multiple-value-bind (element-start element-end) (cl-ppcre:scan element style)
+	(when (and element-start element-end)	  
+	  (let* ((element-style-start (search "[" style :from-end t :end2 element-start))
+			 (element-style-end (search "]" style :start2 element-end)))
+		(when (and element-style-start element-style-end)
+		  (str:substring element-style-start (1+ element-style-end) style))))))
 
+(defun replace-author-value (source style)
+  "Return `style' string with author(s) name(s) properly formatted."
+  (if (search "author" style)
+	  (replace-element-value 'author source style)
+	  (multiple-value-bind (author-style last-index)(find-author-style style)
+		(if author-style
+			(str:replace-all ; Remove double punctuation
+			 ".." "."
+			 (ppcre:regex-replace (str:concat "\\Q" author-style)
+								  style
+								  (str:concat
+								   (build-author-name (tokenize-names (slot-value source 'author))
+													  (str:substring 1 last-index author-style))
+								   (str:substring last-index -1 author-style))))
+			style))))
 
+(defun build-author-name (names style)
+  "Return a string with names separated by a comma and formatted according to style string."
+  (str:join ", "
+			(mapcar (lambda (name)
+					  (let ((name-style style))
+						(when (search "SURNAME" name-style) ; Replace with uppercase surname
+						  (setq name-style
+								(ppcre:regex-replace
+								 "SURNAME"
+								 name-style
+								 (string-upcase (car (reverse name))))))
+						
+						(when (search "surname" name-style) ; Replace with capitalized surname
+						  (setq name-style
+								(ppcre:regex-replace
+								 "surname"
+								 name-style
+								 (string-capitalize (car (reverse name))))))
+						
+						(when (ppcre:scan "[^A-Za-z]NAME" name-style) ; Replace with uppercase name
+						  (setq name-style
+								(ppcre:regex-replace
+								 "NAME"
+								 name-style
+								 (str:join " "
+										   (reverse
+											(cdr
+											 (reverse
+											  (mapcar #'string-upcase name))))))))
+
+						(when (ppcre:scan "[^A-Za-z]name" name-style) ; Replace with capitalized name
+						  (setq name-style
+								(ppcre:regex-replace
+								 "name"
+								 name-style
+								 (str:join " "
+										   (reverse
+											(cdr
+											 (reverse
+											  (mapcar #'string-capitalize name))))))))
+						
+						(when (search "initials" name-style)
+						  (setq name-style
+								(ppcre:regex-replace
+								 "initials"
+								 name-style
+								 (str:join " "
+										   (reverse
+											(cdr
+											 (reverse
+											  (get-name-initials name))))))))
+						name-style))
+					names)))
+
+(defun find-author-style (style)
+  "Return:
+  1.  author style if any style keyword is found;
+  2.  index of the last keyword found."
+  (let ((author-keywords '("name" "NAME" "surname" "SURNAME" "initials"))
+		(author-style nil)
+		(last-index 0))
+	(loop :for keyword :in author-keywords
+		  :when (search keyword style) :do (progn
+		  									 (setq last-index
+		  										   (max last-index
+		  												(nth-value 1 (ppcre:scan keyword
+		  																		 style))))
+											 
+		  									 (when (null author-style)
+											   (setq author-style
+													 (find-element-style keyword style)))))
+	(values author-style last-index)))
+
+(defun tokenize-names (names)
+  "Return a list of tokens for each name in `names' separated by a comma.
+
+  Example:
+  (tokenize-names \"Marc Bloch, Fernand Braudel\")
+  ;; => ('(\"Marc\" \"Bloch\") '(\"Fernand\" \"Braudel\"))"
+  (mapcar (lambda (name) (str:split " " name))
+		  (mapcar #'str:trim (str:split "," names))))
+
+(defun get-name-initials (names)
+  "Receive a list of names and return a list of its initials."
+  (mapcar (lambda (name) (str:concat
+						  (str:substring 0 1 (string-capitalize name))
+						  "."))
+		  names))
+
+(defun get-citation-style (string)
+  "Return a built-in citation style or a customized one."
+  (preprocess-style
+   (if (and (str:starts-with? "[" string) (str:ends-with? "]" string))
+	   string
+	   (let ((style (getf *citation-styles*
+						  (intern (string-upcase string) :keyword))))
+		 (if style
+			 style
+			 (getf *citation-styles*
+				   *default-citation-style*))))))
+
+(defun preprocess-style (string)
+  "Add bold, italic and trim style string."
+  (make-latex-emphasis
+   (make-latex-bold string)))
 
 (defun get-citation-source (citation-id sources)
   "Return a `citation-source' from `sources' list where its id is equal to `citation-id'."
   (let* ((citation-id (subseq citation-id 0 (search "-" citation-id))))
-        (find-if (lambda (x) (string= citation-id (id x))) sources)))
-
-(defun make-citation (citation sources)
-  "Return a formatted latex citation.
-  `string' cointains information about the citation as \"citation-id:pages\";
-  `sources' contains a list of `citation-source'."
-  (str:concat
-   (build-citation
-    (get-citation-source (car citation) sources))))
+	(find-if (lambda (x) (string= citation-id (id x))) sources)))
 
 (defun make-citation-pages (pages)
   (if (or (position #\, pages) (position #\- pages))
-      (str:concat "pp. " pages ". ")
-      (str:concat "p. " pages ". " )))
+      (str:concat "pp. " pages)
+      (str:concat "p. " pages)))
 
 (defun make-latex-bibliography-item (citation object)
   "Return a formatted latex bibliography item."
-    (str:concat (bibitem (car citation))
-                (make-citation citation (bibliography object))
-                (when (> (length citation) 1) (make-citation-pages (cadr citation)))
-                "~%~%"))
+  (let* ((citation-id (car citation))
+		 (citation-source (get-citation-source citation-id (bibliography object))))
+	
+	(when (> (length citation) 1)
+	  (setf (slot-value citation-source 'page) (make-citation-pages (cadr citation))))
+	(str:concat (bibitem citation-id)
+				(build-citation citation-source (citation-style object))
+				"~%~%")))
 
 (defun make-latex-bibliography (object)
   "Return a formatted latex bibliography.
   `object' is a `markdown-object' that contains information about the citations and sources."
-  (str:concat
-   (when *bibliography-in-newpage* "\\newpage~%~%")
-   (thebibliography
-     (str:concat
-      "\\raggedright~%"
-      (reduce #'str:concat
-              (let ((citations (citations object)))
-                (loop :for citation :in citations
-                   :collect (make-latex-bibliography-item citation object))))))))
+  (let ((citations (citations object)))
+	(when citations
+	  (str:concat
+	   (when *bibliography-in-newpage* "\\newpage~%~%")
+	   (thebibliography
+		 (str:concat
+		  "\\raggedright~%"
+		  (reduce #'str:concat
+				  (loop :for citation :in citations
+						:collect (make-latex-bibliography-item citation
+															   object)))))))))

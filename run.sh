@@ -16,7 +16,7 @@ EXAMPLE_PATH="./example"
 MD_FILE="$EXAMPLE_PATH/article.md"
 
 # The output .tex file
-LATEX_FILE="$EXAMPLE_PATH/article.tex"
+LATEX_FILE="$BUILD_PATH/article.tex"
 
 # An optional layout file
 LAYOUT_FILE="$EXAMPLE_PATH/layout.tex"
@@ -27,5 +27,5 @@ OUTPUT_DIR="$BUILD_PATH/output"
 mkdir -p $OUTPUT_DIR
 $BUILD_PATH/$EXECUTABLE_NAME $MD_FILE -o $LATEX_FILE -l $LAYOUT_FILE
 pdflatex -output-directory $OUTPUT_DIR $LATEX_FILE
-cp $OUTPUT_DIR/article.pdf $EXAMPLE_PATH
+cp $OUTPUT_DIR/article.pdf $BUILD_PATH
 

@@ -37,80 +37,88 @@ Les groupes indiens que ne veulent pas le conflit ni la soumission aux colons, o
 ~~~bibliography
 ---
 id: "stock"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
+issue: "6"
 year: "1994"
-edition: "3"
+volume: "3"
 ---
 
 ---
 id: "britt"
-author: "William G. Jacoby"
+author: "William Jacoby"
+issue: "6"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+volume: "3"
 www: "https://www.britannica.com/topic/Native-American/Native-Americans-and-colonization-the-16th-and-17th-centuries"
 ---
 
 ---
 id: "poter"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+issue: "6"
+volume: "3"
 www: "https://www.jstor.org/stable/pdf/1124016.pdf?ab_segments=0%2Fbasic_SYC-5055%2Fcontrol"
 ---
 
 ---
+issue: "6"
 id: "britt2"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+volume: "3"
 www: "https://www.britannica.com/topic/Puritanism"
 ---
 
 ---
 id: "eliot"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+issue: "6"
+volume: "3"
 www: "https://www.jstor.org/stable/pdf/25056633.pdf?casa_token=5LnVilOu894AAAAA:5pFfdhwzFt7MMYeQehAdrKtd1gAP-KeJf4weYV32ztdj62_d7rm8Qh_nM7c1cn1RNwld-28L7pYEuuKniSBjXMDXWv9LzE9oQCWRyy1JkO7ZZI-92HjI"
 ---
 
 ---
 id: "fisher"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+volume: "3"
+issue: "6"
 www: "https://www.jstor.org/stable/pdf/40211987.pdf?refreqid=excelsior%3Aa989be184a45495cd7828476cfe6a15d"
 ---
 
 ---
 id: "code"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+volume: "3"
+issue: "6"
 www: "https://www.law.cornell.edu/uscode/text/42/1996"
 ---
 
 ---
 id: "eliot2"
-author: "William G. Jacoby"
+author: "William Jacoby"
 article: "A good title"
 source: "American Journal of Political Science"
 year: "1994"
-edition: "3"
+volume: "3"
+issue: "6"
 www: "https://www.jstor.org/stable/pdf/1918981.pdf?casa_token=KGMgZuK-gBIAAAAA:NnZFph9vFNuhdbe0BG8KnskZ9Si_hR7uBXALHDWt6MmxcakMH0l1b8afOGpwKSayRW6260oJ1preNUY3i2X0C-3ELX7VX4LavUHj3DPmC3oS5Ok5QCFx"
 ---
 ~~~

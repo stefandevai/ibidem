@@ -227,9 +227,109 @@
 		  (str:substring element-style-start (1+ element-style-end) style))))))
 
 (defun replace-author-value (source style)
-  "Return a style string containing the element in uppercase or downcase"
-  ()
-  style)
+  "Return `style' string with author(s) name(s) properly formatted."
+  (if (search "author" style)
+	  (replace-element-value 'author source style)
+	  (multiple-value-bind (author-style last-index)(find-author-style style)
+		(if author-style
+			(str:replace-all ; Remove double punctuation
+			 ".." "."
+			 (ppcre:regex-replace (str:concat "\\Q" author-style)
+								  style
+								  (str:concat
+								   (build-author-name (tokenize-names (slot-value source 'author))
+													  (str:substring 1 last-index author-style))
+								   (str:substring last-index -1 author-style))))
+			style))))
+
+(defun build-author-name (names style)
+  "Return a string with names separated by a comma and formatted according to style string."
+  (str:join ", "
+			(mapcar (lambda (name)
+					  (let ((name-style style))
+						(when (search "SURNAME" name-style) ; Replace with uppercase surname
+						  (setq name-style
+								(ppcre:regex-replace
+								 "SURNAME"
+								 name-style
+								 (string-upcase (car (reverse name))))))
+						
+						(when (search "surname" name-style) ; Replace with capitalized surname
+						  (setq name-style
+								(ppcre:regex-replace
+								 "surname"
+								 name-style
+								 (string-capitalize (car (reverse name))))))
+						
+						(when (ppcre:scan "[^A-Za-z]NAME" name-style) ; Replace with uppercase name
+						  (setq name-style
+								(ppcre:regex-replace
+								 "NAME"
+								 name-style
+								 (str:join " "
+										   (reverse
+											(cdr
+											 (reverse
+											  (mapcar #'string-upcase name))))))))
+
+						(when (ppcre:scan "[^A-Za-z]name" name-style) ; Replace with capitalized name
+						  (setq name-style
+								(ppcre:regex-replace
+								 "name"
+								 name-style
+								 (str:join " "
+										   (reverse
+											(cdr
+											 (reverse
+											  (mapcar #'string-capitalize name))))))))
+						
+						(when (search "initials" name-style)
+						  (setq name-style
+								(ppcre:regex-replace
+								 "initials"
+								 name-style
+								 (str:join " "
+										   (reverse
+											(cdr
+											 (reverse
+											  (get-name-initials name))))))))
+						name-style))
+					names)))
+
+(defun find-author-style (style)
+  "Return:
+  1.  author style if any style keyword is found;
+  2.  index of the last keyword found."
+  (let ((author-keywords '("name" "NAME" "surname" "SURNAME" "initials"))
+		(author-style nil)
+		(last-index 0))
+	(loop :for keyword :in author-keywords
+		  :when (search keyword style) :do (progn
+		  									 (setq last-index
+		  										   (max last-index
+		  												(nth-value 1 (ppcre:scan keyword
+		  																		 style))))
+											 
+		  									 (when (null author-style)
+											   (setq author-style
+													 (find-element-style keyword style)))))
+	(values author-style last-index)))
+
+(defun tokenize-names (names)
+  "Return a list of tokens for each name in `names' separated by a comma.
+
+  Example:
+  (tokenize-names \"Marc Bloch, Fernand Braudel\")
+  ;; => ('(\"Marc\" \"Bloch\") '(\"Fernand\" \"Braudel\"))"
+  (mapcar (lambda (name) (str:split " " name))
+		  (mapcar #'str:trim (str:split "," names))))
+
+(defun get-name-initials (names)
+  "Receive a list of names and return a list of its initials."
+  (mapcar (lambda (name) (str:concat
+						  (str:substring 0 1 (string-capitalize name))
+						  "."))
+		  names))
 
 (defun get-citation-style (string)
   "Return a built-in citation style or a customized one."
@@ -247,19 +347,6 @@
   "Add bold, italic and trim style string."
   (make-latex-emphasis
    (make-latex-bold string)))
-
-(defun author-surname-initials (string)
-  "Return author' surname followed by the initials of the other names.
-
-  Example:
-  (author-surname-initials \"Fernand Paul Achille Braudel\")
-  ;; => \"Braudel, F. P. A.\""
-  (let ((names (str:split #\Space string)))
-    (str:concat (car (reverse names))
-                ", "
-                (reduce #'str:concat
-                        (mapcar (lambda (name) (str:concat (str:s-first name) ". "))
-                                (reverse (cdr (reverse names))))))))
 
 (defun get-citation-source (citation-id sources)
   "Return a `citation-source' from `sources' list where its id is equal to `citation-id'."

@@ -38,7 +38,7 @@ install:
 
 .PHONY: uninstall
 uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/$(EXECUTABLE_NAME)
+	sudo rm -f $(DESTDIR)$(PREFIX)/bin/$(EXECUTABLE_NAME)
 
 .PHONY: test
 test:

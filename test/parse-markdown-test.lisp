@@ -49,11 +49,13 @@
                     author: \"Stefan Devai\"\
                     date: \"01/02/1900\" \
                     location: \"Wales\"\
+                    citation-style: \"apa\"\
                     ---"
                     object)
       (ok (equal "Stefan Devai" (author object)))
       (ok (equal "01/02/1900" (date object)))
-      (ok (equal "Wales" (location object))))
+      (ok (equal "Wales" (location object)))
+	  (ok (equal "apa" (citation-style object))))
 
     (let ((object (make-instance 'markdown-object)))
       (parse-header "---\
@@ -110,22 +112,25 @@
 
 (deftest markdown-bibliography-parsing
   (testing "citation source parsing"
-    (let* ((cit-src (parse-citation-source "id: \"aid\"
-                                           type: \"atype\"
+    (let ((cit-src (parse-citation-source "id: \"aid\"
+                                           citation: \"acitation\"
                                            author: \"aauthor\"
-                                           title:     \"atitle\"
-                                           journal: \"ajournal\"
-                                           year:\"2019\"
-                                           volume-issue:  \"1(2)\"
-                                           url: \"aurl\"")))
+                                           article:     \"aarticle\"
+                                           source: \"asource\"
+                                           year:\"2020\"
+                                           publisher:  \"apublisher\"
+                                           translation:  \"atranslation\"
+                                           edition:  \"aedition\"
+                                           volume:  \"avolume\"
+                                           issue:  \"aissue\"
+                                           location:  \"alocation\"
+                                           page:  \"apage\"
+                                           other:  \"aother\"
+                                           www: \"aurl\"")))
     (ok (equal "aid" (id cit-src)))
-    (ok (equal "atype" (ctype cit-src)))
     (ok (equal "aauthor" (author cit-src)))
-    (ok (equal "atitle" (title cit-src)))
-    (ok (equal "ajournal" (journal cit-src)))
-    (ok (equal "2019" (year cit-src)))
-    (ok (equal "1(2)" (volume-issue cit-src)))
-    (ok (equal "aurl" (web-link cit-src)))))
+    (ok (equal "2020" (year cit-src)))
+    (ok (equal "aurl" (slot-value cit-src 'www)))))
 
   (testing "markdown citation parsing"
     (ok (null (parse-citation nil)))

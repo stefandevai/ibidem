@@ -16,29 +16,10 @@
 (defvar *default-citation-style* :apa
   "Global style for citations in biliography.")
 
-(defparameter *citation-styles*
+(defvar *citation-styles*
   (list :apa "[surname, initials. ][(year). ][article. ][*source*. ][other. ][location. ][edition. ][volume][(issue). ][page. ][www]"
 		:other "[SURNAME name, ][article.]")
   "Order and style rules to generate citations.")
-
-(defvar *default-citation-format* :apa
-  "Global style for citations in biliography.")
-
-(defvar *citation-formats*
-  (list :apa (list
-			  :article '((author-surname-initials author)
-						 (parenthesis year ". ")
-						 title
-						 (emph journal ", ")
-						 volume-issue)
-			  :web '((author-surname-initials author)
-					 (parenthesis year ". ")
-					 (emph title ". ")
-					 (url web-link)))
-
-		:other (list :article '(author)
-					 :web '(author)))
-  "Order and style rules to generate citation formats.")
 
 (defvar *latex-default-layout*
   (list "\\documentclass{article}~%\\usepackage{hyperref}~%\\usepackage[T1]{fontenc}~%~%\\begin{document}~%~%"

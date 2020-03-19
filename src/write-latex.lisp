@@ -199,7 +199,7 @@
 (defun replace-element-value (element source style &key (extra-style (lambda (string) string)))
   "Return `style' string replaced with a `element' value contained in `source'.
    There's also the possibility of adding custom style with `extra-style'."
-  (let* ((element-string (string-downcase (write-to-string element)))
+  (let* ((element-string (string-downcase (symbol-name element)))
 		 (element-style (find-element-style element-string style))
 		 (element-value (slot-value source element)))	
 	(if element-style

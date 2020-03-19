@@ -66,16 +66,39 @@
     (ok (equal "aaa \\emph{aaa} aaa"
                (make-latex-emphasis "aaa *aaa* aaa")))))
 
-(deftest test-build-citation
+(deftest test-citation-style
   (let ((apa-citation-style (preprocess-style (getf *citation-styles* :apa))))
-	(testing "get right apa style from string"
-	  (ok (equal apa-citation-style
-				 (get-citation-style "apa"))))
+				(testing "get right apa style from string"
+						(ok (equal apa-citation-style
+																	(get-citation-style "apa"))))
 
-	(testing "use apa style if input style is nil"
-	  (ok (equal apa-citation-style
-				 (get-citation-style nil))))
+				(testing "use apa style if input style is nil"
+						(ok (equal apa-citation-style
+																	(get-citation-style nil))))
 
-	(testing "use apa style if input style is undefined"
-	  (ok (equal apa-citation-style
-				 (get-citation-style "undefined style"))))))
+				(testing "use apa style if input style is undefined"
+						(ok (equal apa-citation-style
+																	(get-citation-style "undefined style"))))))
+
+(deftest test-citation-string-manipulation
+				(testing "different page abbreviations depending on number of pages"
+						(ok (equal "p. 47"
+																	(make-citation-pages "47")))
+						(ok (equal "pp. 47,48"
+																	(make-citation-pages "47,48")))
+						(ok (equal "pp. 47-49"
+																	(make-citation-pages "47-49"))))
+
+				(testing "get name initials"
+						(ok (equal '("M." "B.")
+																	(get-name-initials '("Marc" "Bloch")))))
+
+				(testing "tokenize names"
+						(ok (equal '(("Marc" "Bloch") ("Fernand" "Braudel"))
+																	(tokenize-names "Marc Bloch, Fernand Braudel")))
+						(ok (equal '(("Marc" "Bloch"))
+																	(tokenize-names "Marc Bloch")))))
+
+
+
+
